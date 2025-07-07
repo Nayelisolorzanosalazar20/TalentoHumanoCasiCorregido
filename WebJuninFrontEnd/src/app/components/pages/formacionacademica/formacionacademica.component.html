@@ -1,0 +1,99 @@
+<div class="grid">
+  <div class="col-12">
+    <div class="card px-6 py-6" style="background-color: #ffffff;">
+      <p class="font-bold text-xl">FORMACIÓN ACADÉMICA</p>
+
+      <!-- Toolbar -->
+      <p-toolbar styleClass="mb-6">
+        <ng-template pTemplate="left">
+          <div class="my-2">
+            <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+          </div>
+        </ng-template>
+      </p-toolbar>
+
+      <!-- Tabla -->
+      <p-table #dt [value]="formaciondata" responsiveLayout="scroll"
+               [rows]="10" [paginator]="true"
+               [rowsPerPageOptions]="rowsPerPageOptions"
+               [showCurrentPageReport]="true"
+               currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+               selectionMode="multiple" [rowHover]="true" dataKey="id">
+
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="id" style="text-align: center;">ID</th>
+            <th pSortableColumn="institucion" style="text-align: center;">Institución</th>
+            <th pSortableColumn="titulo_obtenido" style="text-align: center;">Título</th>
+            <th pSortableColumn="n_registro" style="text-align: center;">N° Registro</th>
+            <th pSortableColumn="especialidad" style="text-align: center;">Especialidad</th>
+            <th pSortableColumn="fecha_registro" style="text-align: center;">Fecha Registro</th>
+            <th style="text-align: center;">Acciones</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-f>
+          <tr>
+            <td style="text-align: center;">{{ f.id }}</td>
+            <td style="text-align: center;">{{ f.institucion }}</td>
+            <td style="text-align: center;">{{ f.titulo_obtenido }}</td>
+            <td style="text-align: center;">{{ f.n_registro }}</td>
+            <td style="text-align: center;">{{ f.especialidad }}</td>
+            <td style="text-align: center;">{{ f.fecha_registro | date:'yyyy-MM-dd' }}</td>
+            <td style="text-align: center;">
+              <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning mr-2" (click)="editFormacion(f)"></button>
+              <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteFormacion(f.id!)"></button>
+            </td>
+          </tr>
+        </ng-template>
+
+      </p-table>
+    </div>
+
+    <!-- Diálogo para Crear/Editar Formación -->
+    <p-dialog [(visible)]="FormacionDialog" [style]="{width:'600px'}" header="Formación Académica" [modal]="true" class="p-fluid">
+      <ng-template pTemplate="content">
+     
+
+        <div class="field">
+          <label for="institucion" class="font-bold">Institución:</label>
+          <input type="text" pInputText id="institucion" [(ngModel)]="formacion.institucion" required
+                 [ngClass]="{'ng-invalid ng-dirty': submitted && !formacion.institucion}" placeholder="Nombre de la institución" style="width: 100%;" style="font-family: 'Times New Roman', Times, serif;"/>
+          <small class="ng-invalid" *ngIf="submitted && !formacion.institucion">Campo requerido</small>
+        </div>
+
+        <div class="field">
+          <label for="titulo_obtenido" class="font-bold">Título Obtenido:</label>
+          <input type="text" pInputText id="titulo_obtenido" [(ngModel)]="formacion.titulo_obtenido" required
+                 [ngClass]="{'ng-invalid ng-dirty': submitted && !formacion.titulo_obtenido}" placeholder="Ej: Licenciado en Educación" style="width: 100%;"style="font-family: 'Times New Roman', Times, serif;"/>
+          <small class="ng-invalid" *ngIf="submitted && !formacion.titulo_obtenido">Campo requerido</small>
+        </div>
+
+        <div class="field">
+          <label for="n_registro" class="font-bold">Número de Registro:</label>
+          <input type="text" pInputText id="n_registro" [(ngModel)]="formacion.n_registro" placeholder="Ej: SENESCYT-123456"  style="width: 100%;"style="font-family: 'Times New Roman', Times, serif;"/>
+        </div>
+
+        <div class="field">
+          <label for="especialidad" class="font-bold">Especialidad:</label>
+          <input type="text" pInputText id="especialidad" [(ngModel)]="formacion.especialidad" placeholder="Ej: Matemáticas"  style="width: 100%;"style="font-family: 'Times New Roman', Times, serif;"/>
+        </div>
+
+        <div class="field">
+          <label for="fecha_registro" class="font-bold">Fecha de Registro</label>
+          <input type="date" pInputText id="fecha_registro" [(ngModel)]="formacion.fecha_registro" required
+                 [ngClass]="{'ng-invalid ng-dirty': submitted && !formacion.fecha_registro}" style="width: 100%;" style="font-family: 'Times New Roman', Times, serif;"/>
+          <small class="ng-invalid" *ngIf="submitted && !formacion.fecha_registro">Campo requerido</small>
+        </div>
+
+
+
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-danger" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-success" (click)="saveOrUpdateFormacion()"></button>
+      </ng-template>
+    </p-dialog>
+  </div>
+</div>

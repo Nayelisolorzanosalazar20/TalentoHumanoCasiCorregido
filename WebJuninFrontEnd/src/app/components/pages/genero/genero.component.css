@@ -1,0 +1,416 @@
+/* Estilos generales */
+:host ::ng-deep .p-toolbar {
+  background-color: #e0f2f1;
+  border-radius: 8px;
+}
+
+:host ::ng-deep .p-button {
+  font-size: 0.9rem;
+}
+
+:host ::ng-deep .p-button-success {
+  background-color: #388e3c;
+  border: none;
+}
+
+:host ::ng-deep .p-button-danger {
+  background-color: #d32f2f;
+  border: none;
+}
+
+:host ::ng-deep .p-button-warning {
+  background-color: #fbc02d;
+  border: none;
+  color: #000;
+}
+
+:host ::ng-deep .p-dialog .p-dialog-header {
+  background-color: lch(89.84% 14.27 177.07);
+  color: rgb(0, 0, 0);
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+:host ::ng-deep .p-dialog .p-dialog-content {
+  padding-top: 1.5rem;
+}
+
+/* Estilos de tabla */
+:host ::ng-deep .p-table thead th {
+  background-color: #f1f8e9;
+  color: #33691e;
+  font-weight: bold;
+  text-align: center;
+}
+
+:host ::ng-deep .p-table tbody td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+:host ::ng-deep .p-table .p-datatable-header {
+  border: none;
+}
+
+/* Estilos de formulario en el diálogo */
+.field {
+  margin-bottom: 1.2rem;
+}
+
+.field label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #333;
+}
+
+input.p-inputtext,
+input[type="date"],
+input[type="number"] {
+  width: 100%;
+  padding: 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.ng-invalid.ng-dirty {
+  border: 1px solid #e53935 !important;
+}
+
+.ng-invalid small {
+  color: #e53935;
+  font-size: 0.75rem;
+}
+
+/* Ajuste para responsive */
+@media screen and (max-width: 768px) {
+  :host ::ng-deep .p-dialog {
+    width: 95% !important;
+  }
+}
+.descripcion-input {
+  width: 98%;            /* Más largo a los lados */
+  height: 120px;         /* Un poco más alto si lo deseas */
+  padding: 0.8rem 1.2rem;
+  font-size: 1.2rem;
+  border: 1px solid #ccc;
+  border-radius: 50px;   /* Más redondeado */
+  box-sizing: border-box;
+  resize: vertical;      /* Permite ajustar la altura si es textarea */
+  transition: border 0.3s;
+}
+::ng-deep .p-dialog {
+  max-width: 500px !important;
+  width: 90vw !important;
+}
+/* Separar los botones de acción (editar y eliminar) en la tabla */
+/* Separar los botones de acción (editar y eliminar) en la tabla */
+::ng-deep .p-table .p-button,
+::ng-deep .p-datatable .p-button {
+  margin-right: 0.25rem !important;
+}
+
+::ng-deep .p-table .p-button:last-child,
+::ng-deep .p-datatable .p-button:last-child {
+  margin-right: 0 !important;
+}
+::ng-deep .p-dialog .p-dialog-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.custom-dialog .p-dialog-content {
+  background-color: #f2f2f2 !important;
+}
+.grid-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+
+
+::ng-deep .responsive-dialog .p-dialog-content {
+  overflow-y: auto;
+  max-height: 70vh;
+}
+
+::ng-deep p-dropdown .p-dropdown {
+  border-left: none !important;
+  box-shadow: none !important;
+
+}
+
+
+.dialog-scroll-content {
+  max-height: 460px; /* deja espacio para el header y el footer */
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.field label {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  display: block;
+}
+
+input[pInputText] {
+  width: 100%;
+  border-radius: 3px;
+  height: 30px;
+  border: 1px solid #ccc !important; /* color más suave */
+  border-radius: 6px !important;     /* bordes redondeados */
+  box-shadow: none !important;       /* sin sombra al enfocar */
+  transition: border-color 0.2s ease-in-out;
+}
+
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+
+
+
+/* Estilo general del campo */
+.imagen {
+  margin-bottom: 1.5rem;
+}
+
+/* Etiqueta del campo */
+.imagen label {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+/* Estilo del input de tipo archivo */
+input[type="file"] {
+  width: 100%; /* Asegura que el input ocupe el 100% del contenedor */
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  font-size: 1rem;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  height: 50px;
+
+}
+
+/* Estilo para cuando el archivo se ha seleccionado */
+input[type="file"]:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  height: 60px;
+}
+
+/* Estilo cuando el campo es inválido (cuando se presenta el error) */
+input[type="file"].ng-invalid.ng-dirty {
+  border-color: #dc3545;
+  background-color: #f8d7da;
+}
+
+/* Estilo del mensaje de error */
+small.ng-dirty.ng-invalid {
+  color: #dc3545;
+  font-size: 0.875rem;
+  display: block;
+  margin-top: 0.25rem;
+}
+:host ::ng-deep .p-dialog .p-dialog-title {
+  font-family: 'Times New Roman', Times, serif !important;
+  color: #37b125 !important;
+  font-size: 2.2rem !important; /* Puedes ajustar el tamaño aquí */
+}
+/* Agregar espaciado en el contenedor del campo */
+.imagen {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Opcional: Agregar un toque visual con iconos de archivo */
+input[type="file"]::-webkit-file-upload-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type="file"]::-webkit-file-upload-button:hover {
+  background-color: #0056b3;
+}
+
+
+/* Fuente profesional y ligera */
+body {
+  font-family: 'Arial', Times, serif;
+  color: #000000;
+  background: linear-gradient(120deg, #d7d9dd 0%, #ffffff 100%);
+}
+
+
+/* Contenedor centrado */
+.modal-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: rgba(30, 41, 59, 0.18);
+  backdrop-filter: blur(5px);
+  padding: 24px;
+}
+/* Aplica Times New Roman a todos los PrimeNG dropdowns de este componente */
+:host ::ng-deep .p-dropdown,
+:host ::ng-deep .p-dropdown-label,
+:host ::ng-deep .p-dropdown-items {
+  font-family: 'Times New Roman', Times, serif !important;
+}
+
+/* Modal con efecto glass y sombra */
+.modal {
+   background: rgba(255, 255, 255, 0.95);
+  border: 1.5px solid #e0e0e0;
+  padding: 40px 32px;
+  border-radius: 20px;
+  box-shadow: 0 12px 32px rgba(30, 41, 59, 0.12), 0 1.5px 4px rgba(30, 41, 59, 0.07);
+  max-width: 420px;
+  width: 100%;
+  animation: fadeIn 0.5s cubic-bezier(.4,0,.2,1);
+  backdrop-filter: blur(8px);
+}
+
+/* Animación de entrada */
+@keyframes fadeIn {
+  from {
+    transform: translateY(-24px) scale(0.98);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Título */
+.modal h3 {
+  font-size: 27px;
+  font-weight: 700;
+  color: #000000;
+  text-align: center;
+  margin-bottom: 28px;
+  letter-spacing: 0.5px;
+}
+
+/* Cuerpo del formulario */
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+/* Etiqueta */
+label {
+  font-size: 17px;
+  font-weight: 600;
+  color: #036520;
+  margin-bottom: 6px;
+  display: block;
+  letter-spacing: 0.2px;
+}
+
+/* Campo de texto */
+input, select, textarea {
+  padding: 13px 15px;
+  width: 100%;
+  font-size: 16px;
+  border-radius: 10px;
+  border: 1.5px solid #d1d5db;
+  transition: border 0.2s, box-shadow 0.2s;
+  background-color: #ffffff;
+  color: #222;
+  margin-bottom: 2px;
+  box-shadow: 0 1px 2px rgba(65, 80, 105, 0.03);
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: #056952;
+  box-shadow: 0 0 0 3px rgba(8, 115, 118, 0.13);
+  outline: none;
+}
+
+/* Footer del modal */
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 14px;
+  margin-top: 10px;
+}
+
+/* Botones base */
+.cancel-btn,
+.save-btn {
+  padding: 11px 26px;
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.25s, transform 0.18s, box-shadow 0.18s;
+  box-shadow: 0 2px 8px rgba(30,41,59,0.07);
+  letter-spacing: 0.5px;
+  outline: none;
+}
+
+/* Botón cancelar */
+.cancel-btn {
+  background: linear-gradient(90deg, #e74c3c 0%, #c0392b 100%);
+  color: #fff;
+}
+.label-times {
+  font-family: 'Arial', Times, serif;
+}
+:host ::ng-deep .p-tabview-nav li .p-tabview-nav-link {
+  font-family: 'Times New Roman', Times, serif !important;
+}
+.cancel-btn:hover, .cancel-btn:focus {
+  transform: translateY(-2px) scale(1.03);
+  background: linear-gradient(90deg, #c0392b 0%, #a93226 100%);
+  box-shadow: 0 4px 16px rgba(231, 76, 60, 0.13);
+}
+
+/* Botón guardar */
+.save-btn {
+  background: linear-gradient(90deg, #2ecc71 0%, #27ae60 100%);
+  color: #fff;
+}
+
+.save-btn:hover, .save-btn:focus {
+  transform: translateY(-2px) scale(1.03);
+  background: linear-gradient(90deg, #27ae60 0%, #1e8449 100%);
+  box-shadow: 0 4px 16px rgba(46, 204, 113, 0.13);
+}
+
+/* Responsive para móviles */
+@media (max-width: 600px) {
+  .modal {
+    padding: 22px 8px;
+    max-width: 98vw;
+  }
+  .modal-footer {
+    flex-direction: column;
+    gap: 8px;
+  }
+}

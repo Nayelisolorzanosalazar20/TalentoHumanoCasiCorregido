@@ -1,0 +1,107 @@
+<div class="grid">
+  <div class="col-12">
+    <div class="card px-6 py-6">
+
+      <p class="font-bold text-xl">DISCAPACIDAD</p>
+
+      <!-- Toolbar con botón Nuevo -->
+      <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+          <div class="my-2">
+            <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+          </div>
+        </ng-template>
+      </p-toolbar>
+
+      <!-- Tabla de Discapacidad -->
+      <p-table #dt [value]="discapacidadData" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id', 'Numero_carnet_discapacidad']" [paginator]="true"
+               [rowsPerPageOptions]="[5, 10, 20]" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+               selectionMode="multiple" [rowHover]="true" dataKey="id">
+
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="id" style="text-align: center;">ID</th>
+            <th pSortableColumn="Numero_carnet_discapacidad" style="text-align: center;">Carnet</th>
+            <th pSortableColumn="tipo_discapacidad_id" style="text-align: center;">Tipo</th>
+            <th pSortableColumn="grado_discapacidad_id" style="text-align: center;">Grado</th>
+            <th style="text-align: center;">Acciones</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-datos>
+          <tr>
+            <td style="text-align: center;">
+              <span class="p-column-title">ID</span>
+              {{ datos.id }}
+            </td>
+            <td style="text-align: center;">
+              <span class="p-column-title">Carnet</span>
+              {{ datos.Numero_carnet_discapacidad }}
+            </td>
+            <td style="text-align: center;">
+              <span class="p-column-title">Tipo</span>
+  {{ getNombreTipoDiscapacidad(datos.tipo_discapacidad_id) }}
+            </td>
+            <td style="text-align: center;">
+              <span class="p-column-title">Grado</span>
+  {{ getNombreGradoDiscapacidad(datos.grado_discapacidad_id) }}
+            </td>
+            <td class="action-buttons-cell" style="text-align: center;">
+              <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning mr-2" (click)="editDiscapacidad(datos)"></button>
+              <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteDiscapacidad(datos.id)"></button>
+            </td>
+          </tr>
+        </ng-template>
+
+      </p-table>
+
+    </div>
+
+    <!-- Discapacidad Dialog -->
+    <p-dialog [(visible)]="discapacidadDialog" [style]="{width:'700px'}" header="Discapacidad" [modal]="true" class="p-fluid">
+      <ng-template pTemplate="content">
+        <div class="field">
+          <label for="carnet">Carnet:</label>
+          <input type="text" pInputText id="carnet" placeholder="Ingrese el carnet" [(ngModel)]="discapacidad.Numero_carnet_discapacidad" required autofocus
+                 [ngClass]="{'ng-invalid ng-dirty' : submitted && !discapacidad.Numero_carnet_discapacidad}" />
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !discapacidad.Numero_carnet_discapacidad">El carnet es requerido.</small>
+        </div>
+       <div class="field">
+  <label for="tipo">Tipo de discapacidad:</label>
+  <p-dropdown 
+    [options]="tiposDiscapacidad" 
+    optionLabel="descripcion" 
+    optionValue="id"
+    [(ngModel)]="discapacidad.tipo_discapacidad_id"
+    placeholder="Seleccione un tipo"
+    [showClear]="true"
+    inputId="tipo"
+    required
+    [ngClass]="{'ng-invalid ng-dirty' : submitted && !discapacidad.tipo_discapacidad_id}">
+  </p-dropdown>
+  <small class="ng-dirty ng-invalid" *ngIf="submitted && !discapacidad.tipo_discapacidad_id">Tipo es requerido.</small>
+</div>
+       <div class="field">
+  <label for="grado">Grado de discapacidad:</label>
+  <p-dropdown 
+    [options]="gradosDiscapacidad"
+    optionLabel="grado"
+    optionValue="id"
+    [(ngModel)]="discapacidad.grado_discapacidad_id"
+    placeholder="Seleccione un grado"
+    [showClear]="true"
+    inputId="grado"
+    required
+    [ngClass]="{'ng-invalid ng-dirty' : submitted && !discapacidad.grado_discapacidad_id}">
+  </p-dropdown>
+  <small class="ng-dirty ng-invalid" *ngIf="submitted && !discapacidad.grado_discapacidad_id">Grado es requerido.</small>
+</div>
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-danger" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-success" (click)="saveOrUpdateDiscapacidad()"></button>
+      </ng-template>
+    </p-dialog>
+     </div>
+</div>

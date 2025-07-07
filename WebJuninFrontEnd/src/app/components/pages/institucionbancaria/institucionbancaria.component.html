@@ -1,0 +1,106 @@
+<!-- institucionbancaria.component.html -->
+<div class="grid">
+  <div class="col-12">
+    <div class="card px-6 py-6">
+
+      <p class="font-bold text-xl">INFORMACIÓN BANCARIA</p>
+
+      <!-- Toolbar con botón Nuevo -->
+      <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+          <div class="my-2">
+            <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-success mr-2"
+              (click)="openNew()"></button>
+          </div>
+        </ng-template>
+      </p-toolbar>
+
+      <!-- Tabla de información bancaria -->
+      <p-table #dt [value]="institucionBancariaData" responsiveLayout="scroll" [rows]="45"
+        [globalFilterFields]="['id', 'numero_cuenta', 'tipo_cuenta', 'institucionFinanciera.nombre_institucion', 'funcionario.nombres', 'funcionario.apellidos']"
+        [paginator]="true"
+        [rowsPerPageOptions]="[5, 10, 20]" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" selectionMode="multiple"
+        [rowHover]="true" dataKey="id">
+
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="id" style="text-align: center;">ID</th>
+            <th pSortableColumn="numero_cuenta" style="text-align: center;">N° cuenta</th>
+            <th pSortableColumn="tipo_cuenta" style="text-align: center;">Tipo de cuenta</th>
+            <th pSortableColumn="institucion_financiera_id" style="text-align: center;">Institución financiera</th>
+            <th style="text-align: center;">Acciones</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-datos>
+          <tr>
+            <td style="text-align: center;">{{ datos.id }}</td>
+            <td style="text-align: center;">{{ datos.numero_cuenta }}</td>
+            <td style="text-align: center;">{{ datos.tipo_cuenta }}</td>
+            <td style="text-align: center;">
+              {{ datos.institucion_financiera?.nombre_institucion }}
+            </td>
+            
+            <td class="action-buttons-cell" style="width:10%; min-width:10rem; text-align: center;">
+              <button pButton pRipple icon="pi pi-eye" severity="info" (click)="editInstitucionBancaria(datos)"> Más Inf</button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+    <!-- Diálogo de información bancaria -->
+<p-dialog [(visible)]="institucionBancariaDialog" [style]="{width: '800px'}"
+           [breakpoints]="{ '1200px': '925vw' }"
+           header="Datos Bancarios" [modal]="true" class="p-fluid">
+
+      <ng-template pTemplate="content">
+    
+
+        <div class="field col-20 md:col-17">
+         <label for="institucion_financiera_id"class="font-bold">Institución financiera:</label>
+           <p-dropdown id="institucion_financiera_id"
+              [(ngModel)]="institucionBancaria.institucion_financiera_id"
+              [options]="institucionFinancieraData"
+              optionLabel="nombre_institucion"
+              optionValue="id"
+              placeholder="Seleccione institución financiera"
+              required
+              [ngClass]="{'ng-invalid ng-dirty' : submitted && !institucionBancaria.institucion_financiera_id}">
+            </p-dropdown>
+            <small *ngIf="submitted && !institucionBancaria.institucion_financiera_id" class="p-error">
+               Institución financiera es requerida.
+              </small>
+          </div>
+
+
+
+       <div class="formgrid grid">
+         <div class="field col-6 md:col-12">
+         <label for="numero_cuenta"class="font-bold">N° cuenta:</label>
+         <input type="text" pInputText id="numero_cuenta" [(ngModel)]="institucionBancaria.numero_cuenta" required
+          placeholder="Ingrese su número de cuenta"
+         [ngClass]="{'ng-invalid ng-dirty' : submitted && !institucionBancaria.numero_cuenta}" style="font-family: 'Times New Roman', Times, serif;"/>
+            
+           <small *ngIf="submitted && !institucionBancaria.numero_cuenta" class="p-error">N° Cuenta es requerido.</small>
+        </div>
+
+        <div class="field col-6 md:col-12">
+            <label for="tipo_cuenta"class="font-bold">Tipo de cuenta:</label>
+            <input type="text" pInputText id="tipo_cuenta" [(ngModel)]="institucionBancaria.tipo_cuenta" required
+            placeholder="Ingrese su tipo de cuenta"
+            [ngClass]="{'ng-invalid ng-dirty' : submitted && !institucionBancaria.tipo_cuenta}" style="font-family: 'Times New Roman', Times, serif;"/>
+          <small *ngIf="submitted && !institucionBancaria.tipo_cuenta" class="p-error">Tipo de cuenta es requerido.</small>
+       </div>
+</div>
+      </ng-template>
+
+
+      <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-danger" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-success" (click)="saveOrUpdateInstitucionBancaria()"></button>
+      </ng-template>
+    </p-dialog>
+  </div>
+</div>

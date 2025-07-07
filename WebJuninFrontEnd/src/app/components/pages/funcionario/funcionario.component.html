@@ -1,0 +1,1541 @@
+<div class="grid">
+  <div class="col-12">
+    <div class="card px-10 py-10">
+
+      <p class="font-bold text-xl">FUNCIONARIOS</p>
+
+      <!-- Toolbar con botón Nuevo -->
+      <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+          <div class="my-2">
+            <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-success mr-2"
+              (click)="openNew()"></button>
+          </div>
+        </ng-template>
+      </p-toolbar>
+<!-- Mejorado: búsqueda con lupa y botón limpiar -->
+
+<!-- ...existing code... -->
+<div class="p-input-icon-left" style="margin-bottom: 1em; max-width: 350px; position: relative;">
+  <i class="pi pi-search" style="left: 0.75em; top: 70%; transform: translateY(-50%); position: absolute; color: #04961e;"></i>
+  <input
+    id="busqueda-funcionario"
+    pInputText
+    type="text"
+    [(ngModel)]="textoBusqueda"
+    (input)="filtrarFuncionarios($event, dt)"
+    placeholder="Buscar id,nombres,apellidos..."
+    style="width: 100%; padding-left: 2.5em;  padding-right: 1.5em; border: 1px solid #00f72d; border-radius: 8px;"
+    autocomplete="off"
+  />
+  <button
+    *ngIf="textoBusqueda"
+    type="button"
+    class="p-button-text"
+    style="position: absolute; right: 0.5em; top: 60%; transform: translateY(-50%); background: none; border: #04961e; cursor: pointer;"
+    (click)="limpiarBusqueda(dt)"
+    aria-label="Limpiar búsqueda"
+  >
+    <i class="pi pi-times"></i>
+  </button>
+</div>
+      <!-- Tabla de Funcionarios -->
+      <p-table #dt [value]="funcionariodata" responsiveLayout="scroll" [rows]="10"
+        [globalFilterFields]="['DNI', 'nombres', 'apellidos']" [paginator]="true"
+        [rowsPerPageOptions]="[5, 10, 20]" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" selectionMode="multiple"
+        [rowHover]="true" dataKey="id">
+
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="id" style="text-align: center;">ID</th> 
+            <th pSortableColumn="DNI" style="text-align: center;">Cédula</th>
+            <th pSortableColumn="nombres" style="text-align: center;">Nombres</th>
+            <th pSortableColumn="apellidos" style="text-align: center;">Apellidos</th>
+            <th pSortableColumn="edad" style="text-align: center;">Edad</th>
+            <th pSortableColumn="nacionalidad" style="text-align: center;">Nacionalidad</th>
+            <th pSortableColumn="tipo_sangre" style="text-align: center;">Tipo de sangre</th>
+            <th pSortableColumn="fecha_nacimiento" style="text-align: center;">Fecha de nacimiento</th>
+            <th pSortableColumn="direccion" style="text-align: center;">Dirección</th>
+            <th pSortableColumn="direccion_referencia" style="text-align: center;">Dirección de referencia</th>
+            <th pSortableColumn="residencia" style="text-align: center;">Residencia</th>
+            <th pSortableColumn="profesion" style="text-align: center;">Profesión</th>
+            
+            
+            <th pSortableColumn="genero_id" style="text-align: center;">Género</th>
+            <th pSortableColumn="estado_civil_id" style="text-align: center;">Estado civil</th>
+            <th pSortableColumn="etnia_id" style="text-align: center;">Tipo de etnia</th>
+            <th pSortableColumn="parroquia_id" style="text-align: center;">Parroquia</th>
+            <th style="text-align: center;">Foto</th>
+            <th pSortableColumn="documentos" style="text-align: center;">Documentos</th>
+            <th style="text-align: center;">Discapacidades</th>
+            <th style="text-align: center;">Capacitaciones</th>
+            <th style="text-align: center;">Contactos</th>
+            <th style="text-align: center;">Trayectoria</th>
+            <th style="text-align: center;">Información Bancaria</th>
+            <th style="text-align: center;">Formación Académica</th>
+            <th style="text-align: center;">Contratos</th>
+            <th style="text-align: center;">Acciones</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-datos>
+          <tr>
+            <td style="text-align: center;">{{ datos.id }}</td> 
+            <td style="text-align: center;">{{ datos.DNI }}</td>
+            <td style="text-align: center;">{{ datos.nombres }}</td>
+            <td style="text-align: center;">{{ datos.apellidos }}</td>
+            <td style="text-align: center;">{{ datos.edad }}</td>
+            <td style="text-align: center;">{{ datos.nacionalidad }}</td>
+            <td style="text-align: center;">{{ datos.tipo_sangre }}</td>
+            <td style="text-align: center;">{{ datos.fecha_nacimiento ? (datos.fecha_nacimiento | date:'yyyy-MM-dd') : '' }}</td>            <td style="text-align: center;">{{ datos.direccion }}</td>
+            <td style="text-align: center;">{{ datos.direccion_referencia }}</td>
+            <td style="text-align: center;">{{ datos.residencia }}</td>
+            <td style="text-align: center;">{{ datos.profesion }}</td>           
+            <td style="text-align: center;">{{ datos.genero?.descripcion }}</td>
+            <td style="text-align: center;">{{ datos.estado_civil?.descripcion }}</td>
+            <td style="text-align: center;">{{ datos.etnia?.descripcion }}</td>
+            <td style="text-align: center;">{{ datos.parroquia?.descripcion }}</td>
+           
+            <td style="text-align: center;">
+             <img *ngIf="datos.foto"
+               [src]="'http://localhost:5000/uploads/funcionarios/' + datos.foto"
+                alt="Foto"
+                width="60"
+                height="60"
+                style="object-fit:cover; border-radius:6px; cursor:pointer"
+                (click)="onShowImage(datos.foto)" />
+            </td>
+             <td style="text-align: center;">
+   <button
+  pButton
+  type="button"
+  icon="pi pi-folder-open"
+  label="ver documentos"
+  class="p-button-text"
+  style="color: #0ab638;"
+    (click)="mostrarDocumentos(datos)">
+  </button>
+</td>    
+    <!-- ...otras columnas... -->
+<td style="text-align: center;">
+  <button
+  pButton
+  type="button"
+  icon="pi pi-eye"
+  label="ver discapacidad"
+  class="p-button-text"
+  style="color: #0ab638;"
+    (click)="verDiscapacidadesFuncionario(datos)">
+  </button>
+</td>
+
+<td style="text-align: center;">
+  <button
+  pButton
+  type="button"
+  icon="pi pi-eye"
+  label="ver capacitaciones"
+  class="p-button-text"
+  style="color: #0ab638;"
+    (click)="verCapacitacionesFuncionario(datos)">
+  </button>
+</td>
+
+<td style="text-align: center;">
+  <button
+  pButton
+  type="button"
+  icon="pi pi-eye"
+  label="ver contactos"
+  class="p-button-text"
+  style="color: #0ab638;"
+    (click)="verContactosFuncionario(datos)">
+  </button>
+</td>
+<td style="text-align: center;">
+  <button
+  pButton
+  type="button"
+  icon="pi pi-eye"
+  label="ver  trayectorias"
+  class="p-button-text"
+  style="color: #0ab638;"
+    (click)="verTrayectoriasFuncionario(datos)">
+  </button>
+</td>
+<td style="text-align: center;">
+  <button
+  pButton
+  type="button"
+  icon="pi pi-eye"
+  label="ver información bancaria"
+  class="p-button-text"
+  style="color: #0ab638;"
+    (click)="verInfoBancariaFuncionario(datos)">
+  </button>
+</td>
+<td style="text-align: center;">
+<button
+  pButton
+  type="button"
+  icon="pi pi-eye"
+  label="ver formación académica"
+  class="p-button-text"
+  style="color: #0ab638;"
+  (click)="verFormacionAcademicaFuncionario(datos)">
+</button>
+<td style="text-align: center;">
+<button
+  pButton
+  type="button"
+  icon="pi pi-eye"
+  label="ver contratos"
+  class="p-button-text"
+  style="color: #0ab638;"
+  (click)="verContratoFuncionario(datos)">
+</button>
+<!-- ...otras columnas... -->
+  <p-dialog header="Documentos del funcionario" [(visible)]="mostrarDocsDialog" [modal]="true" [style]="{width: '500px'}">
+  <ng-template pTemplate="content">
+    <ul *ngIf="documentosFuncionario.length > 0; else sinDocs" style="text-align: left;">
+      <li *ngFor="let doc of documentosFuncionario">
+        <a [href]="getDocumentoUrl(doc)" target="_blank">
+          {{ getNombreTipoDocumento(doc.tipo_documento_id) }}
+        </a>
+      </li>
+    </ul>
+    <ng-template #sinDocs>
+      <span>No hay documentos para este funcionario.</span>
+    </ng-template>
+  </ng-template>
+    <ng-template pTemplate="footer">
+    <button pButton label="Cerrar" icon="pi pi-times" (click)="mostrarDocsDialog=false"></button>
+  </ng-template>
+  </p-dialog>
+  <!-- Dialogo para ver discapacidades -->
+<p-dialog header="Discapacidades registradas" [(visible)]="mostrarDialogoDiscapacidades" [modal]="true" [style]="{width: '500px'}">
+  <ng-template pTemplate="content">
+    <ul *ngIf="discapacidadesFuncionario.length > 0; else sinDiscapacidad" style="text-align: left;">
+      <li *ngFor="let disc of discapacidadesFuncionario">
+        <b>Carnet:</b> {{ disc.Numero_carnet_discapacidad }}<br>
+        <b>Tipo:</b> {{ getNombreTipoDiscapacidad(disc.tipo_discapacidad_id) }}<br>
+        <b>Grado:</b> {{ getNombreGradoDiscapacidad(disc.grado_discapacidad_id) }}
+        <hr>
+      </li>
+    </ul>
+    <ng-template #sinDiscapacidad>
+      <span>No hay discapacidades registradas para este funcionario.</span>
+    </ng-template>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button pButton label="Cerrar" icon="pi pi-times" (click)="mostrarDialogoDiscapacidades=false"></button>
+  </ng-template>
+</p-dialog>
+<p-dialog header="Contactos del funcionario" [(visible)]="mostrarDialogoContactos" [modal]="true" [style]="{width: '500px'}">
+  <ng-template pTemplate="content">
+    <ul *ngIf="contactosFuncionario.length > 0; else sinContactos" style="text-align: left;">
+      <li *ngFor="let c of contactosFuncionario">
+        <b>Teléfono personal:</b> {{ c.telefono_personal }}<br>
+        <b>Teléfono emergencia:</b> {{ c.telefono_emergencia }}<br>
+        <b>Correo personal:</b> {{ c.correo_personal }}<br>
+        <b>Nombre emergencia:</b> {{ c.nombre_persona_emergencia }}<br>
+        <b>Parentesco:</b> {{ c.parentesco_emergencia }}
+        <hr>
+      </li>
+    </ul>
+    <ng-template #sinContactos>
+      <span>No hay contactos registrados para este funcionario.</span>
+    </ng-template>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button pButton label="Cerrar" icon="pi pi-times" (click)="mostrarDialogoContactos=false"></button>
+  </ng-template>
+</p-dialog>
+<p-dialog header="Trayectoria Laboral" [(visible)]="mostrarDialogoTrayectorias" [modal]="true" [style]="{width: '500px'}">
+  <ng-template pTemplate="content">
+    <ul *ngIf="trayectoriasFuncionario.length > 0; else sinTrayectorias" style="text-align: left;">
+      <li *ngFor="let t of trayectoriasFuncionario">
+        <b>Institución:</b> {{ t.nombre_institucion }}<br>
+        <b>Fecha de Ingreso:</b> {{ t.fecha_ingreso | date:'dd/MM/yyyy' }}<br>
+        <b>Fecha de Salida:</b> {{ t.fecha_salida | date:'dd/MM/yyyy' }}<br>
+        <b>Cargo:</b> {{ t.nombre_cargo }}
+        <hr>
+      </li>
+    </ul>
+    <ng-template #sinTrayectorias>
+      <span>No hay trayectorias laborales registradas para este funcionario.</span>
+    </ng-template>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button pButton label="Cerrar" icon="pi pi-times" (click)="mostrarDialogoTrayectorias=false"></button>
+  </ng-template>
+</p-dialog>
+
+
+<p-dialog header="Información Bancaria" [(visible)]="mostrarDialogoInfoBancaria" [modal]="true" [style]="{width: '500px'}">
+  <ng-template pTemplate="content">
+    <ul *ngIf="infoBancariaFuncionario.length > 0; else sinInfoBancaria" style="text-align: left;">
+      <li *ngFor="let info of infoBancariaFuncionario">
+        <b>Institución:</b> {{ info.nombre_institucion }}<br>
+        <b>Número de cuenta:</b> {{ info.numero_cuenta }}<br>
+        <b>Tipo de cuenta:</b> {{ info.tipo_cuenta }}
+        <hr>
+      </li>
+    </ul>
+    <ng-template #sinInfoBancaria>
+      <span>No hay información bancaria registrada para este funcionario.</span>
+    </ng-template>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button pButton label="Cerrar" icon="pi pi-times" (click)="mostrarDialogoInfoBancaria=false"></button>
+  </ng-template>
+</p-dialog>
+<p-dialog header="Formación Académica" [(visible)]="mostrarDialogoFormacionAcademica" [modal]="true" [style]="{width: '500px'}">
+  <ng-template pTemplate="content">
+    <ul *ngIf="formacionAcademicaFuncionario.length > 0; else sinFormacion" style="text-align: left;">
+      <li *ngFor="let f of formacionAcademicaFuncionario">
+        <b>Institución:</b> {{ f.institucion }}<br>
+        <b>Título:</b> {{ f.titulo_obtenido }}<br>
+        <b>Especialidad:</b> {{ f.especialidad }}<br>
+        <b>Fecha de registro:</b> {{ f.fecha_registro | date:'dd/MM/yyyy' }}
+        <hr>
+      </li>
+    </ul>
+    <ng-template #sinFormacion>
+      <span>No hay formación académica registrada para este funcionario.</span>
+    </ng-template>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button pButton label="Cerrar" icon="pi pi-times" (click)="mostrarDialogoFormacionAcademica=false"></button>
+  </ng-template>
+
+
+</p-dialog>
+<p-dialog header="Editar Capacitación" [(visible)]="mostrarDialogoEditarCapacitacion" [modal]="true" [style]="{width: '400px'}">
+  <ng-template pTemplate="content">
+    <form>
+      <div class="field">
+        <label>Descripción:</label>
+        <input type="text" pInputText [(ngModel)]="nuevaCapacitacion.descripcion" name="edit_descripcion" />
+      </div>
+      <div class="field">
+        <label>Fecha de Inicio:</label>
+        <input type="date" pInputText [(ngModel)]="nuevaCapacitacion.fecha_inicio" name="edit_fecha_inicio" />
+      </div>
+      <div class="field">
+        <label>Fecha de Fin:</label>
+        <input type="date" pInputText [(ngModel)]="nuevaCapacitacion.fecha_fin" name="edit_fecha_fin" />
+      </div>
+      <div class="field">
+        <label>N° de Horas:</label>
+        <input type="number" pInputText [(ngModel)]="nuevaCapacitacion.n_horas" name="edit_n_horas" />
+      </div>
+      <div class="field">
+        <label>Archivo:</label>
+        <input type="file" (change)="onCapacitacionFileSelect($event)" />
+        <div *ngIf="capacitacionPreviewUrl">
+          <a [href]="capacitacionPreviewUrl" target="_blank">Ver archivo</a>
+        </div>
+        <div *ngIf="nuevaCapacitacion.archivo && !capacitacionPreviewUrl">
+          {{ nuevaCapacitacion.archivo.name }}
+        </div>
+      </div>
+    </form>
+  </ng-template>
+  <ng-template pTemplate="footer">
+   <button pButton label="Cancelar" icon="pi pi-times" (click)="mostrarDialogoEditarCapacitacion = false"></button>
+    <button pButton label="Guardar" icon="pi pi-check" (click)="guardarEdicionCapacitacion()"></button>
+  </ng-template>
+</p-dialog>
+<!-- Dialogo para ver capacitaciones -->
+<p-dialog header="Capacitaciones registradas" [(visible)]="mostrarDialogoCapacitaciones" [modal]="true" [style]="{width: '500px'}">
+  <ng-template pTemplate="content">
+    <ul *ngIf="capacitacionesFuncionario.length > 0; else sinCapacitaciones" style="text-align: left;">
+      <li *ngFor="let cap of capacitacionesFuncionario">
+        <b>Descripción:</b> {{ cap.descripcion }}<br>
+        <b>Fecha de inicio:</b> {{ cap.fecha_inicio | date:'dd/MM/yyyy' }}<br>
+        <b>Fecha de fin:</b> {{ cap.fecha_fin | date:'dd/MM/yyyy' }}<br>
+        <b>N° de horas:</b> {{ cap.n_horas }}<br>
+       <b>Archivo:</b>
+<a *ngIf="cap.ruta_archivo" [href]="cap.ruta_archivo" target="_blank">Ver archivo</a>
+<a *ngIf="!cap.ruta_archivo && cap.ruta_almacenamiento"
+   [href]="'http://localhost:5000/uploads/capacitaciones/' + cap.ruta_almacenamiento"
+   target="_blank">
+  Ver archivo
+</a>
+<span *ngIf="!cap.ruta_archivo && !cap.ruta_almacenamiento">
+  {{ cap.archivo?.name || 'Sin archivo' }}
+</span>
+        <hr>
+      </li>
+    </ul>
+    <ng-template #sinCapacitaciones>
+      <span>No hay capacitaciones registradas para este funcionario.</span>
+    </ng-template>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button pButton label="Cerrar" icon="pi pi-times" (click)="mostrarDialogoCapacitaciones=false"></button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog header="Contrato del funcionario" [(visible)]="mostrarDialogoContrato" [modal]="true" [style]="{width: '400px'}">
+  <ng-template pTemplate="content">
+    <div *ngIf="contratoSeleccionado">
+      <b>Fecha de inicio:</b> {{ formatearFecha(contratoSeleccionado.fecha_inicio_contrato) }}<br>
+      <b>Fecha de fin:</b> {{ formatearFecha(contratoSeleccionado.fecha_fin_contrato) }}
+    </div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button pButton label="Cerrar" icon="pi pi-times" (click)="mostrarDialogoContrato=false"></button>
+  </ng-template>
+</p-dialog>
+            <td style="text-align: center;">
+              <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning mr-2"
+                (click)="editFuncionario(datos)"></button>
+              <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                (click)="deleteFuncionario(datos.id!)"></button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+    <!-- Diálogo para crear/editar funcionario -->
+    <p-dialog 
+   [(visible)]="funcionarioDialog" 
+  header="Funcionario" 
+  [modal]="true" 
+  class="p-fluid"
+  [style]="{width: '90vw', minWidth: '90vw', maxWidth: '85vw'}">
+      <ng-template pTemplate="content">
+
+<p-tabView>
+  <p-tabPanel >
+     <ng-template pTemplate="header">
+      <i class="pi pi-user icon-3d" style="margin-right:6px"></i> Funcionario
+    </ng-template>
+       <div class="field">
+          <label for="DNI"class="font-bold label-times">Cédula:<span style="color:red">*</span></label>
+          <input type="text" pInputText id="DNI" [(ngModel)]="funcionarios.DNI" required
+            placeholder="Ingrese su Cédula"
+            [ngClass]="{'ng-invalid ng-dirty' : submitted && !funcionarios.DNI}" style="font-family: 'Times New Roman', Times, serif;" />
+          <small *ngIf="submitted && !funcionarios.DNI" class="p-error">Cédula es requerida.</small>
+
+        </div>
+        <div class="field">
+          <label for="nombres"class="font-bold  label-times">Nombres:<span style="color:red">*</span></label>
+          <input type="text" pInputText id="nombres" [(ngModel)]="funcionarios.nombres" required
+          placeholder="Ingrese sus Nombres"
+            [ngClass]="{'ng-invalid ng-dirty' : submitted && !funcionarios.nombres}"style="font-family: 'Times New Roman', Times, serif;" />
+          <small *ngIf="submitted && !funcionarios.nombres" class="p-error">Nombres son requeridos.</small>
+        </div>
+        <div class="field">
+          <label for="apellidos"class="font-bold label-times">Apellidos:<span style="color:red">*</span></label>
+          <input type="text" pInputText id="apellidos" [(ngModel)]="funcionarios.apellidos" required
+           placeholder="Ingrese sus Apellidos"
+          [ngClass]="{'ng-invalid ng-dirty' : submitted && !funcionarios.apellidos}"   style="font-family: 'Times New Roman', Times, serif;" />
+          <small *ngIf="submitted && !funcionarios.apellidos" class="p-error">Apellidos son requeridos.</small>
+        </div>
+
+        <div class="field">
+          <label for="nacionalidad"class="font-bold label-times">Nacionalidad:<span style="color:red">*</span></label>
+          <input type="text" pInputText id="nacionalidad" [(ngModel)]="funcionarios.nacionalidad" required
+           placeholder="Ingrese su Nacionalidad"
+          [ngClass]="{'ng-invalid ng-dirty' : submitted && !funcionarios.nacionalidad}" style="font-family: 'Times New Roman', Times, serif;" />
+          <small *ngIf="submitted && !funcionarios.nacionalidad" class="p-error">Nacionalidad es requerida.</small>
+        </div>
+        <div class="field">
+          <label for="tipo_sangre"class="font-bold label-times">Tipo de Sangre:<span style="color:red">*</span></label>
+          <input type="text" pInputText id="tipo_sangre" [(ngModel)]="funcionarios.tipo_sangre" required
+            placeholder="Ingrese su Tipo de Sangre"
+          [ngClass]="{'ng-invalid ng-dirty' : submitted && !funcionarios.tipo_sangre}"style="font-family: 'Times New Roman', Times, serif;" />
+          <small *ngIf="submitted && !funcionarios.tipo_sangre" class="p-error">Tipo de sangre es requerida.</small>
+        </div>
+        <div class="field">
+          <label for="fecha_nacimiento"class="font-bold label-times">Fecha de Nacimiento:<span style="color:red">*</span></label>
+          <input type="date" pInputText id="fecha_nacimiento" [(ngModel)]="funcionarios.fecha_nacimiento" required
+          (ngModelChange)="calcularEdad($event)"
+          [ngClass]="{'ng-invalid ng-dirty' : submitted && !funcionarios.fecha_nacimiento}" 
+          style="font-family: 'Times New Roman', Times, serif;"/>  
+          <small *ngIf="submitted && !funcionarios.fecha_nacimiento" class="p-error">Fecha de nacimiento es requerida.</small>
+        
+        </div>
+          <div class="field">
+          <label for="edad"class="font-bold label-times">Edad:<span style="color:red">*</span></label>
+          <input type="number" pInputText id="edad" [(ngModel)]="funcionarios.edad" required
+          placeholder="Ingrese su Edad"
+           [readonly]="true"
+           [ngClass]="{'ng-invalid ng-dirty' : submitted && !funcionarios.edad}" style="font-family: 'Times New Roman', Times, serif;" />
+          <small *ngIf="submitted && !funcionarios.edad" class="p-error">Edad es requerida.</small>
+        </div>
+        <div class="field">
+          <label for="profesion"class="font-bold label-times">Profesión:</label>
+         <input type="text" pInputText id="profesion"
+           [(ngModel)]="funcionarios.profesion"
+           placeholder="Ingrese su Profesión"required
+          [ngClass]="{'ng-invalid ng-dirty' : submitted && !funcionarios.profesion}"
+  style="font-family: 'Times New Roman', Times, serif;" />
+<small *ngIf="submitted && !funcionarios.profesion" class="p-error">Profesión es requerida.</small>
+        </div>
+       
+         <div class="field">
+          <label for="genero_id"class="font-bold label-times">Género:<span style="color:red">*</span></label>
+          <p-dropdown id="genero_id" [(ngModel)]="funcionarios.genero_id" [options]="generodata"
+            optionLabel="descripcion" optionValue="id" placeholder="Seleccione género" required
+            [ngClass]="{'ng-invalid ng-dirty' : submitted && !funcionarios.genero_id}">
+          </p-dropdown>
+          <small *ngIf="submitted && !funcionarios.genero_id" class="p-error">Género es requerido.</small>
+        </div>
+            <div class="field">
+          <label for="estado_civil_id"class="font-bold label-times">Estado Civil:<span style="color:red">*</span></label>
+          <p-dropdown id="estado_civil_id" [(ngModel)]="funcionarios.estado_civil_id" [options]="estadocivildata"
+            optionLabel="descripcion" optionValue="id" placeholder="Seleccione estado civil" required
+            [ngClass]="{'ng-invalid ng-dirty' : submitted && !funcionarios.estado_civil_id}">
+          </p-dropdown>
+          <small *ngIf="submitted && !funcionarios.estado_civil_id" class="p-error">Estado civil es requerido.</small>
+        </div>
+                <div class="field">
+          <label for="etnia_id"class="font-bold label-times">Etnia:<span style="color:red">*</span></label>
+          <p-dropdown id="etnia_id" [(ngModel)]="funcionarios.etnia_id" [options]="etniadata"
+            optionLabel="descripcion" optionValue="id" placeholder="Seleccione etnia" required
+            [ngClass]="{'ng-invalid ng-dirty' : submitted && !funcionarios.etnia_id}">
+          </p-dropdown>
+          <small *ngIf="submitted && !funcionarios.etnia_id" class="p-error">Etnia es requerida.</small>
+        </div>
+        <div class="field">
+          <label for="foto"class="font-bold label-times">Foto:<span style="color:red">*</span></label>
+          <td style="text-align: center;">
+         
+            <input type="file" id="foto" (change)="onFileSelected($event)" required accept="image/*"           
+            [ngClass]="{'ng-invalid ng-dirty' : submitted && !funcionarios.foto}" accept="image/*" style="font-family: 'Times New Roman', Times, serif;" />
+          <small *ngIf="submitted && !funcionarios.foto" class="p-error">Foto es requerida.</small>
+          </div>
+        </p-tabPanel>
+        
+       <p-tabPanel>
+        <ng-template pTemplate="header">
+    <i class="pi pi-volume-down icon-3d" style="margin-right:6px"></i> Discapacidad
+  </ng-template>
+  <div class="field" style="display: flex; flex-direction: column; align-items: flex-start; gap: 0.5em;">
+    <label class="font-bold label-times" style="margin-bottom: 0;">¿Tiene alguna discapacidad reconocida por una entidad oficial?</label>
+    <div style="display: flex; align-items: center; gap: 1.5em;">
+      <p-radioButton name="tieneDiscapacidad" [value]="false" [(ngModel)]="tieneDiscapacidad" inputId="discapacidadNo"></p-radioButton>
+      <label for="discapacidadNo" style="margin-bottom: 0;">No</label>
+      <p-radioButton name="tieneDiscapacidad" [value]="true" [(ngModel)]="tieneDiscapacidad" inputId="discapacidadSi"></p-radioButton>
+      <label for="discapacidadSi" style="margin-bottom: 0;">Sí</label>
+    </div>
+  </div>
+
+  <!-- Campos de discapacidad solo si tieneDiscapacidad es true -->
+  <div *ngIf="tieneDiscapacidad">
+    <div class="field">
+      <label for="Numero_carnet_discapacidad" class="font-bold label-times">Carnet Discapacidad:</label>
+      <input type="text" pInputText id="Numero_carnet_discapacidad" [(ngModel)]="funcionarios.Numero_carnet_discapacidad"
+        placeholder="Ingrese su Carnet de Discapacidad" required
+        [ngClass]="{'ng-invalid ng-dirty' : submitted && !funcionarios.Numero_carnet_discapacidad}" style="font-family: 'Times New Roman', Times, serif;" />
+      <small *ngIf="submitted && !funcionarios.Numero_carnet_discapacidad" class="p-error">Carnet es requerido.</small>
+    </div>
+    <div class="field">
+      <label for="tipo_discapacidad_id" class="font-bold label-times">Tipo Discapacidad:</label>
+      <p-dropdown id="tipo_discapacidad_id" [(ngModel)]="funcionarios.tipo_discapacidad_id" [options]="tipodiscapacidaddata"
+        optionLabel="descripcion" optionValue="id" placeholder="Seleccione tipo discapacidad"
+        [ngClass]="{'ng-invalid ng-dirty' : submitted && !funcionarios.tipo_discapacidad_id}">
+      </p-dropdown>
+      <small *ngIf="submitted && !funcionarios.tipo_discapacidad_id" class="p-error">Tipo discapacidad es requerido.</small>
+    </div>
+    <div class="field">
+      <label for="grado_discapacidad_id" class="font-bold label-times">Grado Discapacidad:</label>
+      <p-dropdown id="grado_discapacidad_id" [(ngModel)]="funcionarios.grado_discapacidad_id" [options]="gradodiscapacidaddata"
+        optionLabel="grado" optionValue="id" placeholder="Seleccione grado discapacidad"
+        [ngClass]="{'ng-invalid ng-dirty' : submitted && !funcionarios.grado_discapacidad_id}">
+      </p-dropdown>
+      <small *ngIf="submitted && !funcionarios.grado_discapacidad_id" class="p-error">Grado discapacidad es requerido.</small>
+    </div>
+    <!-- ...dentro de tu <p-tabPanel header="Discapacidad"> ... -->
+
+<!-- Botón para agregar discapacidad temporal -->
+<button type="button"
+  (click)="agregarDiscapacidadTempData()"
+  style="background-color: #21933c; color: white; border: none; padding: 0.5em 0; border-radius: 4px; margin-bottom: 1em; width: 100%; font-size: 1.1em;"
+  *ngIf="tieneDiscapacidad">
+  Agregar Discapacidad
+</button>
+
+<!-- Tabla temporal de discapacidades -->
+<p-table [value]="discapacidadTempData" *ngIf="discapacidadTempData.length > 0" [style]="{'margin-top': '1em'}">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Carnet Discapacidad</th>
+      <th>Tipo Discapacidad</th>
+      <th>Grado Discapacidad</th>
+      <th>Acciones</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-discapacidad>
+    <tr>
+      <td>{{ discapacidad.Numero_carnet_discapacidad }}</td>
+      <td>{{ getNombreTipoDiscapacidad(discapacidad.tipo_discapacidad_id) }}</td>
+      <td>{{ getNombreGradoDiscapacidad(discapacidad.grado_discapacidad_id) }}</td>
+      <td>
+        <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning mr-2"
+          (click)="editarDiscapacidad(discapacidad)" title="Editar discapacidad"></button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<div *ngIf="discapacidadTempData.length === 0 && tieneDiscapacidad" style="text-align:center; margin-top:1em;">
+  No hay discapacidades registradas.
+</div>
+
+<p-dialog header="Editar Discapacidad" [(visible)]="mostrarDialogoEditarDiscapacidad" [modal]="true" [style]="{width: '400px'}">
+  <ng-template pTemplate="content">
+    <form>
+      <div class="field">
+        <label>Carnet Discapacidad:</label>
+        <input type="text" pInputText [(ngModel)]="funcionarios.Numero_carnet_discapacidad" name="edit_Numero_carnet_discapacidad" />
+      </div>
+      <div class="field">
+        <label>Tipo Discapacidad:</label>
+        <p-dropdown [options]="tipodiscapacidaddata"
+                    [(ngModel)]="funcionarios.tipo_discapacidad_id"
+                    optionLabel="descripcion"
+                    optionValue="id"
+                    name="edit_tipo_discapacidad_id"></p-dropdown>
+      </div>
+      <div class="field">
+        <label>Grado Discapacidad:</label>
+        <p-dropdown [options]="gradodiscapacidaddata"
+                    [(ngModel)]="funcionarios.grado_discapacidad_id"
+                    optionLabel="grado"
+                    optionValue="id"
+                    name="edit_grado_discapacidad_id"></p-dropdown>
+      </div>
+    </form>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button pButton label="Cancelar" icon="pi pi-times" (click)="mostrarDialogoEditarDiscapacidad=false"></button>
+    <button pButton label="Guardar" icon="pi pi-check" (click)="guardarEdicionDiscapacidad()"></button>
+  </ng-template>
+</p-dialog>
+  </div>
+</p-tabPanel>
+
+
+  <!-- ----------------------------DIRECCION ---------------------------- -->
+
+
+
+    <p-tabPanel >
+       <ng-template pTemplate="header">
+    <i class="pi pi-map-marker icon-3d" style="margin-right:6px" ></i> Dirección
+  </ng-template>
+      <div class="field">
+          <label for="direccion"class="font-bold label-times">Dirección:<span style="color:red">*</span></label>
+          <input type="text" pInputText id="direccion" [(ngModel)]="funcionarios.direccion" 
+          placeholder="Ingrese su Dirección"required
+            [ngClass]="{'ng-invalid ng-dirty' : submitted && !funcionarios.direccion}" style="font-family: 'Times New Roman', Times, serif;" />
+          <small *ngIf="submitted && !funcionarios.direccion" class="p-error">Dirección es requerida.</small>
+        </div>
+        <div class="field">
+          <label for="direccion_referencia"class="font-bold label-times">Dirección de Referencia:<span style="color:red">*</span></label>
+          <input type="text" pInputText id="direccion_referencia" [(ngModel)]="funcionarios.direccion_referencia" required
+            placeholder="Ingrese su Dirección de Referencia"
+          [ngClass]="{'ng-invalid ng-dirty' : submitted && !funcionarios.direccion_referencia}" style="font-family: 'Times New Roman', Times, serif;" />
+          <small *ngIf="submitted && !funcionarios.direccion_referencia" class="p-error">Dirección de referencia es requerida.</small>
+        </div>
+        <div class="field">
+          <label for="residencia"class="font-bold label-times">Residencia:</label>
+          <input type="text" pInputText id="residencia" [(ngModel)]="funcionarios.residencia" 
+           placeholder="Ingrese su Residencia" required
+          [ngClass]="{'ng-invalid ng-dirty' : submitted && !funcionarios.residencia}"style="font-family: 'Times New Roman', Times, serif;"  />
+          <small *ngIf="submitted && !funcionarios.residencia" class="p-error">Residencia es requerida.</small>
+        </div>
+
+
+         <div class="field">
+    <label for="canton_id" class="font-bold label-times">Provincia:</label>
+
+  <p-dropdown 
+  [options]="provinciasData" 
+  [(ngModel)]="funcionarios.provincia_id"
+  optionLabel="nombre_provincia"
+  optionValue="id"
+  (onChange)="onProvinciaChange($event)"
+  placeholder="Seleccione provincia"
+  name="provincia_id"
+  required>
+</p-dropdown>
+    <small *ngIf="submitted && !funcionarios.provincia_id" class="p-error">Provincia es requerida.</small>
+  </div>
+
+         <div class="field">
+    <label for="canton_id" class="font-bold label-times">Cantón:</label>
+    <p-dropdown 
+  [options]="cantonesData" 
+  [(ngModel)]="funcionarios.canton_id"
+  optionLabel="descripcion"
+  optionValue="id"
+  (onChange)="onCantonChange($event)"
+  placeholder="Seleccione cantón"
+  [disabled]="!funcionarios.provincia_id"
+  name="canton_id"
+  required>
+</p-dropdown>
+    <small *ngIf="submitted && !funcionarios.canton_id" class="p-error">Cantón es requerido.</small>
+  </div>
+
+    <div class="field">
+    <label for="parroquia_id" class="font-bold label-times">Parroquia:</label>
+<p-dropdown
+  [options]="parroquiasData"
+  optionLabel="descripcion"
+  optionValue="id"
+  [(ngModel)]="funcionarios.parroquia_id"
+  placeholder="Seleccione parroquia"
+  [disabled]="!funcionarios.canton_id"
+  name="parroquia_id"
+  required>
+</p-dropdown>
+    <small *ngIf="submitted && !funcionarios.parroquia_id" class="p-error">Parroquia es requerida.</small>
+  </div>
+<!-- Tabla temporal de direcciones -->
+<p-table [value]="direccionesTempData" *ngIf="direccionesTempData.length > 0" [ngStyle]="{'margin-top': '1em'}">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Dirección</th>
+      <th>Provincia</th>
+      <th>Cantón</th>
+      <th>Parroquia</th>
+      <th>Dirección Referencia</th>
+      <th>Residencia</th>
+      <th>Acciones</th>
+      
+    </tr>
+  </ng-template>
+<ng-template pTemplate="body" let-dir let-i="rowIndex">
+  <tr>
+    <td>{{ dir.direccion }}</td>
+    <td>{{ dir.provincia_nombre }}</td>
+    <td>{{ dir.canton_nombre }} </td>
+    <td>{{ dir.parroquia_nombre }}</td>
+    <td>{{ dir.direccion_referencia }}</td>
+    <td>{{ dir.residencia }}</td>
+    <td>
+      <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-warning"
+        (click)="editarDireccionTemp(dir, i)" title="Editar dirección"></button>
+    </td>
+  </tr>
+</ng-template>
+</p-table>
+<button pButton type="button" label="Agregar Dirección" icon="pi pi-plus" (click)="agregarDireccionTemp()"></button>
+</p-tabPanel>
+
+  <!-- ----------------------------CONTRATO ---------------------------- -->
+
+
+<!-- ...existing code... -->
+<p-tabPanel >
+  <ng-template pTemplate="header">
+    <i class="pi pi-briefcase icon-3d" style="margin-right:6px"></i> Contrato
+  </ng-template>
+  <div class="field">
+    <label class="font-bold label-times">¿Sigue desempeñándose en su cargo actual?</label>
+    <div style="display: flex; align-items: center; gap: 1.5em;">
+      <p-radioButton name="sigueLaborando" [value]="true" [(ngModel)]="sigueLaborando" inputId="laborandoSi"></p-radioButton>
+      <label for="laborandoSi" style="margin-bottom: 0;">Sí</label>
+      <p-radioButton name="sigueLaborando" [value]="false" [(ngModel)]="sigueLaborando" inputId="laborandoNo"></p-radioButton>
+      <label for="laborandoNo" style="margin-bottom: 0;">No</label>
+    </div>
+  </div>
+  <div class="field">
+    <label for="fecha_inicio_contrato" class="font-bold label-times">Fecha Inicio Contrato:<span style="color:red">*</span></label>
+    <input type="date" pInputText id="fecha_inicio_contrato" [(ngModel)]="funcionarios.fecha_inicio_contrato" required
+      [ngClass]="{'ng-invalid ng-dirty' : submitted && !funcionarios.fecha_inicio_contrato}" style="font-family: 'Times New Roman', Times, serif;" />
+    <small *ngIf="submitted && !funcionarios.fecha_inicio_contrato" class="p-error">Fecha inicio contrato es requerida.</small>
+  </div>
+  <div class="field" *ngIf="sigueLaborando === false">
+    <label for="fecha_fin_contrato" class="font-bold label-times">Fecha Fin Contrato:</label>
+    <input type="date" pInputText id="fecha_fin_contrato" [(ngModel)]="funcionarios.fecha_fin_contrato"
+      [ngClass]="{'ng-invalid ng-dirty' : submitted && !funcionarios.fecha_fin_contrato}" style="font-family: 'Times New Roman', Times, serif;" />
+    <small *ngIf="submitted && !funcionarios.fecha_fin_contrato" class="p-error">Fecha fin contrato es requerida.</small>
+
+    
+  </div>
+
+  <!-- Botón para agregar contrato temporal -->
+ <button type="button"
+  (click)="agregarContratoTempData()"
+  style="background-color: #21933c; color: white; border: none; padding: 0.5em 0; border-radius: 4px; margin-bottom: 0.5em; width: 100%; font-size: 1.2em;">
+  Agregar Contrato
+</button>
+
+  <!-- Tabla temporal de contratos -->
+  <p-table [value]="contratosTempData" *ngIf="contratosTempData.length > 0" [style]="{'margin-top': '1em'}">
+      <ng-template pTemplate="header">
+    <tr>
+      <th pSortableColumn="sigueLaborando">
+        ¿Sigue Laborando?
+        <p-columnFilter type="text" field="sigueLaborando" display="menu">
+          <ng-template pTemplate="filtericon">
+            <i class="pi pi-search"></i> <!-- Ícono de lupa -->
+          </ng-template>
+        </p-columnFilter>
+      </th>
+      <th pSortableColumn="fecha_inicio_contrato">
+        Fecha Inicio
+        <p-columnFilter type="date" field="fecha_inicio_contrato" display="menu">
+          <ng-template pTemplate="filtericon">
+            <i class="pi pi-search"></i>
+          </ng-template>
+        </p-columnFilter>
+      </th>
+      <th pSortableColumn="fecha_fin_contrato">
+        Fecha Fin
+        <p-columnFilter type="date" field="fecha_fin_contrato" display="menu">
+          <ng-template pTemplate="filtericon">
+            <i class="pi pi-search"></i>
+          </ng-template>
+        </p-columnFilter>
+      </th>
+      <th>Acciones</th>
+    </tr>
+  </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th>¿Sigue Laborando?</th>
+        <th>Fecha Inicio</th>
+        <th>Fecha Fin</th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-contrato>
+      <tr>
+        <td>{{ contrato.sigueLaborando ? 'Sí' : 'No' }}</td>
+        <td>{{ formatearFecha(contrato.fecha_inicio_contrato) }}</td>
+        <td>{{ formatearFecha(contrato.fecha_fin_contrato) }}</td>
+        <td>
+       <!-- Botón de editar formación académica en la columna de acciones -->
+<tr *ngFor="let contrato of contratosTempData; let i = index">
+  <!-- ...otras columnas... -->
+  <td>
+<button
+  pButton
+  pRipple
+  type="button"
+  icon="pi pi-pencil"
+  class="p-button-rounded p-button-warning mr-2"
+  (click)="editarContrato(contrato, i)"
+  title="Editar contrato">
+</button>  </td>
+</tr>
+        </td>
+       <form (ngSubmit)="agregarContratoTempData()" #contratoForm="ngForm" style="margin-bottom: 1em;">
+  <!-- Tus campos de contrato aquí -->
+ 
+</form>
+
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <div *ngIf="contratosTempData.length === 0" style="text-align:center; margin-top:1em;">
+    No hay contratos registrados.
+  </div>
+
+  <p-dialog header="Editar Contrato" [(visible)]="mostrarDialogoEditarContrato" [modal]="true" [style]="{width: '400px'}">
+    <ng-template pTemplate="content">
+      <form>
+        <div class="field">
+          <label>¿Sigue desempeñándose en su cargo actual?</label>
+          <div style="display: flex; align-items: center; gap: 1.5em;">
+            <p-radioButton name="edit_sigueLaborando" [value]="true" [(ngModel)]="contratoEditando.sigueLaborando" inputId="editLaborandoSi"></p-radioButton>
+            <label for="editLaborandoSi" style="margin-bottom: 0;">Sí</label>
+            <p-radioButton name="edit_sigueLaborando" [value]="false" [(ngModel)]="contratoEditando.sigueLaborando" inputId="editLaborandoNo"></p-radioButton>
+            <label for="editLaborandoNo" style="margin-bottom: 0;">No</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>Fecha Inicio Contrato:</label>
+          <input type="date" pInputText [(ngModel)]="contratoEditando.fecha_inicio_contrato" name="edit_fecha_inicio_contrato" />
+        </div>
+        <div class="field" *ngIf="contratoEditando.sigueLaborando === false">
+          <label>Fecha Fin Contrato:</label>
+          <input type="date" pInputText [(ngModel)]="contratoEditando.fecha_fin_contrato" name="edit_fecha_fin_contrato" />
+        </div>
+      </form>
+    </ng-template>
+    <ng-template pTemplate="footer">
+      <button pButton label="Cancelar" icon="pi pi-times" (click)="mostrarDialogoEditarContrato=false"></button>
+      <button pButton label="Guardar" icon="pi pi-check" (click)="guardarEdicionContrato()"></button>
+    </ng-template>
+  </p-dialog>
+</p-tabPanel>
+
+  <!-- ----------------------------CONTACTOS ---------------------------- -->
+
+
+
+
+<p-tabPanel >
+<ng-template pTemplate="header">
+    <i class="pi pi-users icon-3d" style="margin-right:6px"></i> Contactos
+  </ng-template>
+  <!-- Formulario para agregar contacto temporalmente -->
+  <form (ngSubmit)="agregarContactoTemp()" #contactoForm="ngForm" style="margin-bottom: 1em;">
+    <div class="field">
+      <label class="font-bold label-times">Teléfono Personal:<span style="color:red">*</span></label>
+      <input type="text" pInputText placeholder="Ingrese el número de telefono personal" [(ngModel)]="nuevoContacto.telefono_personal" name="telefono_personal" required style="font-family: 'Times New Roman', Times, serif;" />
+    </div>
+    <div class="field">
+      <label class="font-bold label-times">Teléfono Domicilio:</label>
+      <input type="text" pInputText placeholder="Ingrese el número de telefono domiciliario" [(ngModel)]="nuevoContacto.telefono_domicilio" name="telefono_domicilio" style="font-family: 'Times New Roman', Times, serif;" />
+    </div>
+    <div class="field">
+      <label class="font-bold label-times">Teléfono Emergencia:<span style="color:red">*</span></label>
+      <input type="text" pInputText placeholder="Ingrese el número de telefono de emergencia" [(ngModel)]="nuevoContacto.telefono_emergencia" name="telefono_emergencia" required style="font-family: 'Times New Roman', Times, serif;" />
+    </div>
+    <div class="field">
+      <label class="font-bold label-times">Correo Personal:<span style="color:red">*</span></label>
+      <input type="email" pInputText placeholder="Ingrese correo personal" [(ngModel)]="nuevoContacto.correo_personal" name="correo_personal" required style="font-family: 'Times New Roman', Times, serif;" />
+    </div>
+    <div class="field">
+      <label class="font-bold label-times">Correo Institucional:</label>
+      <input type="email" pInputText placeholder="Ingrese correo institucional" [(ngModel)]="nuevoContacto.correo_institucional" name="correo_institucional" style="font-family: 'Times New Roman', Times, serif;" />
+    </div>
+    <div class="field">
+      <label class="font-bold label-times">Persona Emergencia:<span style="color:red">*</span></label>
+      <input type="text" pInputText placeholder="Ingrese el Nombre y Apellido de la persona de emergencia" [(ngModel)]="nuevoContacto.nombre_persona_emergencia" name="nombre_persona_emergencia" required style="font-family: 'Times New Roman', Times, serif;" />
+    </div>
+    <div class="field">
+      <label class="font-bold label-times">Parentesco Contacto Emergencia:<span style="color:red">*</span></label>
+      <input type="text" pInputText placeholder="Ingrese el parentesco con la persona de emergencia" [(ngModel)]="nuevoContacto.parentesco_emergencia" name="parentesco_emergencia" required style="font-family: 'Times New Roman', Times, serif;" />
+    </div>
+   <button type="submit" [disabled]="!contactoForm.form.valid"
+  style="background-color: #21933c; color: white; border: none; padding: 0.4em 0; border-radius: 4px; width: 100%; font-size: 1.1em; height: 2.2em;">
+  Agregar Contacto
+</button>
+  </form>
+   
+
+  
+  <p-table [value]="contactosTempData" *ngIf="contactosTempData.length > 0">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Teléfono Personal</th>
+        <th>Teléfono Domicilio</th>
+        <th>Teléfono Emergencia</th>
+        <th>Correo Personal</th>
+        <th>Correo Institucional</th>
+        <th>Persona Emergencia</th>
+        <th>Parentesco</th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-contacto>
+      <tr>
+        <td>{{ contacto.telefono_personal }}</td>
+        <td>{{ contacto.telefono_domicilio }}</td>
+        <td>{{ contacto.telefono_emergencia }}</td>
+        <td>{{ contacto.correo_personal }}</td>
+        <td>{{ contacto.correo_institucional }}</td>
+        <td>{{ contacto.nombre_persona_emergencia }}</td>
+        <td>{{ contacto.parentesco_emergencia }}</td>
+        <td>
+          <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning mr-2"
+            (click)="editarContacto(contacto)" title="Editar contacto"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <div *ngIf="contactosTempData.length === 0" style="text-align:center; margin-top:1em;">
+    No hay contactos registrados.
+  </div>
+
+  <!-- Diálogo de edición fuera de la tabla -->
+  <p-dialog header="Editar Contacto" [(visible)]="mostrarDialogoEditarContacto" [modal]="true" [style]="{width: '400px'}">
+    <ng-template pTemplate="content">
+      <form>
+        <div class="field">
+          <label>Teléfono Personal:</label>
+          <input type="text" pInputText [(ngModel)]="contactoEditando.telefono_personal" name="edit_telefono_personal" />
+        </div>
+        <div class="field">
+          <label>Teléfono Emergencia:</label>
+          <input type="text" pInputText [(ngModel)]="contactoEditando.telefono_emergencia" name="edit_telefono_emergencia" />
+        </div>
+        <div class="field">
+          <label>Correo Personal:</label>
+          <input type="email" pInputText [(ngModel)]="contactoEditando.correo_personal" name="edit_correo_personal" />
+        </div>
+        <div class="field">
+          <label>Persona Emergencia:</label>
+          <input type="text" pInputText [(ngModel)]="contactoEditando.nombre_persona_emergencia" name="edit_nombre_persona_emergencia" />
+        </div>
+        <div class="field">
+          <label>Parentesco:</label>
+          <input type="text" pInputText [(ngModel)]="contactoEditando.parentesco_emergencia" name="edit_parentesco_emergencia" />
+        </div>
+      </form>
+    </ng-template>
+    <ng-template pTemplate="footer">
+      <button pButton label="Cancelar" icon="pi pi-times" (click)="mostrarDialogoEditarContacto=false"></button>
+      <button pButton label="Guardar" icon="pi pi-check" (click)="guardarEdicionContacto()"></button>
+    </ng-template>
+  </p-dialog>
+</p-tabPanel>
+
+
+
+
+  <!-- ----------------------------TRAYECTORIA LABORAL ---------------------------- -->
+
+
+
+        <p-tabPanel >
+          <ng-template pTemplate="header">
+    <i class="pi pi-briefcase icon-3d" style="margin-right:6px"></i> Trayectoria Laboral
+  </ng-template>
+  <!-- Formulario para agregar trayectoria laboral temporalmente -->
+  <form (ngSubmit)="agregarTrayectoriaLaboralTemp()" #trayectoriaForm="ngForm" style="margin-bottom: 1em;">
+    <div class="field">
+      <label class="font-bold label-times">Nombre de la Institución:<span style="color:red">*</span></label>
+      <input type="text" pInputText placeholder="Nombre de la institución" [(ngModel)]="nuevaTrayectoria.nombre_institucion" name="nombre_institucion" required style="font-family: 'Times New Roman', Times, serif;" />
+    </div>
+    <div class="field">
+      <label class="font-bold label-times">Fecha de Ingreso:<span style="color:red">*</span></label>
+      <input type="date" pInputText [(ngModel)]="nuevaTrayectoria.fecha_ingreso" name="fecha_ingreso" required style="font-family: 'Times New Roman', Times, serif;" />
+    </div>
+    <div class="field">
+      <label class="font-bold label-times">Fecha de Salida:<span style="color:red">*</span></label>
+      <input type="date" pInputText [(ngModel)]="nuevaTrayectoria.fecha_salida" name="fecha_salida" required style="font-family: 'Times New Roman', Times, serif;" />
+    </div>
+    <div class="field">
+      <label class="font-bold label-times">Cargo ocupado:<span style="color:red">*</span></label>
+      <input type="text" pInputText placeholder="Cargo ocupado" [(ngModel)]="nuevaTrayectoria.nombre_cargo" name="nombre_cargo" required style="font-family: 'Times New Roman', Times, serif;" />
+    </div>
+    <button type="submit" [disabled]="!trayectoriaForm.form.valid"
+  style="background-color: #21933c; color: white; border: none; padding: 0.4em 0; border-radius: 4px; width: 100%; font-size: 1.1em; height: 2.2em;">
+  Agregar Trayectoria
+</button>
+  </form>
+
+  <!-- Tabla temporal de trayectorias laborales -->
+ <p-table [value]="trayectoriasTempData" *ngIf="trayectoriasTempData.length > 0">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Institución</th>
+      <th>Fecha de Ingreso</th>
+      <th>Fecha de Salida</th>
+      <th>Cargo</th>
+      <th>Acciones</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-trayectoria>
+    <tr>
+      <td>{{ trayectoria.nombre_institucion }}</td>
+      <td>{{ trayectoria.fecha_ingreso | date:'dd/MM/yyyy' }}</td>
+      <td>{{ trayectoria.fecha_salida | date:'dd/MM/yyyy' }}</td>
+      <td>{{ trayectoria.nombre_cargo }}</td>
+      <td>
+          <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning mr-2"
+          (click)="editarTrayectoria(trayectoria)" title="Editar trayectoria"></button>
+      </td>
+    
+    </tr>
+  </ng-template>
+</p-table>
+
+  <div *ngIf="trayectoriasTempData.length === 0" style="text-align:center; margin-top:1em;">
+    No hay trayectorias laborales registradas.
+  </div>
+
+  <p-dialog header="Editar Trayectoria Laboral" [(visible)]="mostrarDialogoEditarTrayectoria" [modal]="true" [style]="{width: '400px'}">
+  <ng-template pTemplate="content">
+    <form>
+      <div class="field">
+        <label>Nombre de la Institución:</label>
+        <input type="text" pInputText [(ngModel)]="trayectoriaEditando.nombre_institucion" name="edit_nombre_institucion" />
+      </div>
+      <div class="field">
+        <label>Fecha de Ingreso:</label>
+        <input type="date" pInputText [(ngModel)]="trayectoriaEditando.fecha_ingreso" name="edit_fecha_ingreso" />
+      </div>
+      <div class="field">
+        <label>Fecha de Salida:</label>
+        <input type="date" pInputText [(ngModel)]="trayectoriaEditando.fecha_salida" name="edit_fecha_salida" />
+      </div>
+      <div class="field">
+        <label>Cargo ocupado:</label>
+        <input type="text" pInputText [(ngModel)]="trayectoriaEditando.nombre_cargo" name="edit_nombre_cargo" />
+      </div>
+    </form>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button pButton label="Cancelar" icon="pi pi-times" (click)="mostrarDialogoEditarTrayectoria=false"></button>
+    <button pButton label="Guardar" icon="pi pi-check" (click)="guardarEdicionTrayectoria()"></button>
+  </ng-template>
+</p-dialog>
+</p-tabPanel>
+
+  <!-- ----------------------------CAPACITACIONES---------------------------- -->
+
+<!-- Panel de Capacitaciones -->
+<p-tabPanel>
+  <ng-template pTemplate="header">
+    <i class="pi pi-file-pdf icon-3d" style="margin-right:6px"></i> Capacitaciones
+  </ng-template>
+  <form (ngSubmit)="agregarCapacitacionTemp()" #capacitacionForm="ngForm" style="margin-bottom: 1em;">
+    <div class="field">
+      <label class="font-bold label-times">Descripción:<span style="color:red">*</span></label>
+      <input type="text" pInputText placeholder="Descripción de la capacitación"
+        [(ngModel)]="nuevaCapacitacion.descripcion" name="descripcion" required style="font-family: 'Times New Roman', Times, serif;" />
+    </div>
+    <div class="field">
+      <label class="font-bold label-times">Fecha de Inicio:<span style="color:red">*</span></label>
+      <input type="date" pInputText [(ngModel)]="nuevaCapacitacion.fecha_inicio" name="fecha_inicio" required style="font-family: 'Times New Roman', Times, serif;" />
+    </div>
+    <div class="field">
+      <label class="font-bold label-times">Fecha de Fin:<span style="color:red">*</span></label>
+      <input type="date" pInputText [(ngModel)]="nuevaCapacitacion.fecha_fin" name="fecha_fin" required style="font-family: 'Times New Roman', Times, serif;" />
+    </div>
+    <div class="field">
+      <label class="font-bold label-times">N° de Horas:<span style="color:red">*</span></label>
+      <input type="number" pInputText placeholder="Horas" [(ngModel)]="nuevaCapacitacion.n_horas" name="n_horas" required style="font-family: 'Times New Roman', Times, serif;" />
+    </div>
+    <!-- ...dentro del formulario de capacitación... -->
+<div class="field">
+  <label class="font-bold label-times">Archivo de Certificado:<span style="color:red">*</span></label>
+  <input type="file" name="archivo" (change)="onCapacitacionFileSelect($event)" required />
+  <div *ngIf="capacitacionPreviewUrl">
+  </div>
+  <div *ngIf="nuevaCapacitacion.archivo && !capacitacionPreviewUrl">
+    {{ nuevaCapacitacion.archivo.name }}
+  </div>
+</div>
+    <button type="submit" [disabled]="!capacitacionForm.form.valid"
+      style="background-color: #21933c; color: white; border: none; padding: 0.4em 0; border-radius: 4px; width: 100%; font-size: 1.1em; height: 2.2em;">
+      Agregar Capacitación
+    </button>
+  </form>
+
+  <!-- Tabla temporal de capacitaciones -->
+  <p-table [value]="capacitacionesTempData" *ngIf="capacitacionesTempData.length > 0">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Descripción</th>
+        <th>Fecha Inicio</th>
+        <th>Fecha Fin</th>
+        <th>N° Horas</th>
+        <th>Archivo</th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-cap let-i="rowIndex">
+      <tr>
+        <td>{{ cap.descripcion }}</td>
+        <td>{{ cap.fecha_inicio | date:'dd/MM/yyyy' }}</td>
+        <td>{{ cap.fecha_fin | date:'dd/MM/yyyy' }}</td>
+        <td>{{ cap.n_horas }}</td>
+       
+<td>
+  <a *ngIf="getCapacitacionRutaArchivo(cap)" [href]="getCapacitacionRutaArchivo(cap)" target="_blank">
+    Ver archivo
+  </a>
+<span *ngIf="!getCapacitacionRutaArchivo(cap)">
+  {{ cap.ruta_almacenamiento ? cap.ruta_almacenamiento.split('/').pop() : (cap.archivo?.name || 'Sin archivo') }}
+</span>
+</td>
+        <td>
+          <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning mr-2"
+            (click)="editarCapacitacion(cap, i)" title="Editar capacitación"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <div *ngIf="capacitacionesTempData.length === 0" style="text-align:center; margin-top:1em;">
+    No hay capacitaciones registradas.
+  </div>
+</p-tabPanel>
+<p-dialog header="Editar Capacitación" [(visible)]="mostrarDialogoEditarCapacitacion" [modal]="true" [style]="{width: '400px'}">
+  <ng-template pTemplate="content">
+    <form>
+      <div class="field">
+        <label>Descripción:</label>
+        <input type="text" pInputText [(ngModel)]="nuevaCapacitacion.descripcion" name="edit_descripcion" />
+      </div>
+      <div class="field">
+        <label>Fecha de Inicio:</label>
+        <input type="date" pInputText [(ngModel)]="nuevaCapacitacion.fecha_inicio" name="edit_fecha_inicio" />
+      </div>
+      <div class="field">
+        <label>Fecha de Fin:</label>
+        <input type="date" pInputText [(ngModel)]="nuevaCapacitacion.fecha_fin" name="edit_fecha_fin" />
+      </div>
+      <div class="field">
+        <label>N° de Horas:</label>
+        <input type="number" pInputText [(ngModel)]="nuevaCapacitacion.n_horas" name="edit_n_horas" />
+      </div>
+      <div class="field">
+        <label>Archivo:</label>
+        <input type="file" (change)="onCapacitacionFileSelect($event)" />
+        <div *ngIf="capacitacionPreviewUrl">
+          <a [href]="capacitacionPreviewUrl" target="_blank">Ver archivo</a>
+        </div>
+        <div *ngIf="nuevaCapacitacion.archivo && !capacitacionPreviewUrl">
+          {{ nuevaCapacitacion.archivo.name }}
+        </div>
+      </div>
+    </form>
+  </ng-template>
+  <ng-template pTemplate="footer">
+   <button pButton label="Cancelar" icon="pi pi-times" (click)="mostrarDialogoEditarCapacitacion = false"></button>
+    <button pButton label="Guardar" icon="pi pi-check" (click)="guardarEdicionCapacitacion()"></button>
+  </ng-template>
+</p-dialog>
+
+  <!-- ----------------------------INFORMACION BANCARIA---------------------------- -->
+
+
+
+
+  <p-tabPanel >
+    <ng-template pTemplate="header">
+    <i class="pi pi-credit-card icon-3d" style="margin-right:6px"></i> Información Bancaria
+  </ng-template>
+  <!-- Formulario para agregar información bancaria temporalmente -->
+  <form (ngSubmit)="agregarInfoBancariaTemp()" #bancariaForm="ngForm" style="margin-bottom: 1em;">
+    <div class="field">
+  <label class="font-bold">Institución financiera:<span style="color:red">*</span></label>
+  <!-- ...existing code... -->
+<p-dropdown
+  [options]="institucionesFinancieras"
+  [(ngModel)]="nuevaInfoBancaria.institucion_financiera_id"
+  optionLabel="nombre_institucion"
+  optionValue="id"
+  placeholder="Seleccione institución"
+  name="institucion_financiera_id"
+  required>
+</p-dropdown>
+<!-- ...existing code... -->
+</div>
+    <div class="field">
+      <label class="font-bold label-times">N° cuenta:<span style="color:red">*</span></label>
+      <input type="text" pInputText placeholder="Ingrese su número de cuenta" [(ngModel)]="nuevaInfoBancaria.numero_cuenta" name="numero_cuenta" required style="font-family: 'Times New Roman', Times, serif;" />
+    </div>
+    <!-- ...existing code... -->
+<div class="field">
+  <label class="font-bold label-times">Tipo de cuenta:<span style="color:red">*</span></label>
+  <p-dropdown
+    [options]="tiposCuenta"
+    [(ngModel)]="nuevaInfoBancaria.tipo_cuenta_id"
+    optionLabel="nombre"
+    optionValue="id"
+    placeholder="Seleccione tipo de cuenta"
+    name="tipo_cuenta_id"
+    required>
+  </p-dropdown>
+  <small *ngIf="submitted && !nuevaInfoBancaria.tipo_cuenta_id" class="p-error">Tipo de cuenta es requerido.</small>
+</div>
+<!-- ...existing code... -->
+     <button type="submit" [disabled]="!bancariaForm.form.valid"
+  style="background-color: #21933c; color: white; border: none; padding: 0.4em 0; border-radius: 4px; width: 100%; font-size: 1.1em; height: 2.2em;">
+  Agregar Información Bancaria
+</button>
+  </form>
+ 
+
+  <!-- Tabla temporal de información bancaria -->
+  <p-table [value]="infoBancariaTempData" *ngIf="infoBancariaTempData.length > 0">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Institución financiera</th>
+      <th>N° cuenta</th>
+      <th>Tipo de cuenta</th>
+      <th>Acciones</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-info>
+    <tr>
+      <td>{{ getNombreInstitucionFinanciera(info.institucion_financiera_id) }}</td>
+      <td>{{ info.numero_cuenta }}</td>
+      <td>{{ getNombreTipoCuenta(info.tipo_cuenta_id) }}</td>
+      <td>
+        <!-- Botón de editar formación académica en la columna de acciones -->
+<button
+  pButton
+  pRipple
+  type="button"
+  icon="pi pi-pencil"
+  class="p-button-rounded p-button-warning mr-2"
+  (click)="editarInfoBancaria(info)"
+  title="Editar información bancaria">
+</button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+  <div *ngIf="infoBancariaTempData.length === 0" style="text-align:center; margin-top:1em;">
+    No hay información bancaria registrada.
+  </div>
+  <!-- ...existing code... -->
+<!-- ...existing code... -->
+<p-dialog header="Editar Información Bancaria" [(visible)]="mostrarDialogoEditarInfoBancaria" [modal]="true" [style]="{width: '400px'}">
+  <ng-template pTemplate="content">
+    <form (ngSubmit)="guardarEdicionInfoBancaria()" #editBancariaForm="ngForm">
+      <div class="field">
+        <label>Institución financiera:</label>
+        <p-dropdown 
+          [options]="institucionesFinancieras"
+          [(ngModel)]="infoBancariaEditando.institucion_financiera_id"
+          optionLabel="nombre_institucion"
+          optionValue="id"
+          placeholder="Seleccione una institución"
+          name="edit_institucion_financiera_id"
+          required>
+        </p-dropdown>
+      </div>
+      <div class="field">
+        <label>N° cuenta:</label>
+        <input type="text" pInputText [(ngModel)]="infoBancariaEditando.numero_cuenta" name="edit_numero_cuenta" required />
+      </div>
+      <div class="field">
+        <label>Tipo de cuenta:</label>
+        <input type="text" pInputText [(ngModel)]="infoBancariaEditando.tipo_cuenta" name="edit_tipo_cuenta" required />
+      </div>
+    </form>
+  </ng-template>
+  <ng-template pTemplate="footer">
+  <button pButton label="Cancelar" icon="pi pi-times" (click)="mostrarDialogoEditarInfoBancaria=false"></button>
+  <button pButton label="Guardar" icon="pi pi-check" (click)="guardarEdicionInfoBancaria()"></button>
+</ng-template>
+</p-dialog>
+<!-- ...existing code... -->
+</p-tabPanel>
+
+
+  <!-- ----------------------------DOCUMENTOS ---------------------------- -->
+
+
+
+ <p-tabPanel >
+  <ng-template pTemplate="header">
+    <i class="pi pi-folder-open icon-3d" style="margin-right:6px"></i> Documentos
+  </ng-template>
+    <form (ngSubmit)="agregarDocumentoTemp()" #documentoForm="ngForm">
+   <div>
+  <label for="tipoDocumento" class="font-bold">Tipo de Documento:<span style="color:red">*</span></label>
+  <select id="tipoDocumento" [(ngModel)]="nuevoDocumento.tipo_documento_id" name="tipo_documento_id" required>
+    <option *ngFor="let tipo of tipodocumentodata" [value]="tipo.id">{{ tipo.nombre_archivo }}</option>
+  </select>
+</div>
+<div>
+  <label for="archivo" class="font-bold">Archivo:<span style="color:red">*</span></label>
+  <input type="file" id="archivo" (change)="onDocumentoFileSelect($event)" required />
+</div>
+    <!-- Previsualización para imágenes -->
+    <div *ngIf="previewUrl">
+      <p>Previsualización:</p>
+      <img [src]="previewUrl" alt="Previsualización" style="max-width: 200px; max-height: 200px;" *ngIf="isImage"/>
+      <p *ngIf="!isImage">{{ nuevoDocumento.archivo?.name }}</p>
+    </div>
+    <!-- Usa el estilo de PrimeNG y un ícono -->
+<button
+  pButton
+  type="button"
+  label="Subir documento"
+  icon="pi pi-upload"
+  class="p-button-success p-mr-2"
+  (click)="agregarDocumentoTemp()"
+></button>
+  </form>
+  
+
+<!-- Tabla temporal de documentos -->
+<p-table [value]="documentosTempData" *ngIf="documentosTempData.length > 0">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Archivo</th>
+      <th>Tipo de Documento</th>
+      <th>Acciones</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-doc let-i="rowIndex">
+    <tr>
+      <td>
+        <a *ngIf="doc.ruta_almacenamiento" [href]="getDocumentoUrl(doc)" target="_blank">Ver archivo</a>
+        <span *ngIf="!doc.ruta_almacenamiento">{{ doc.ruta_almacenamiento }}</span>
+      </td>
+      
+<td>{{ getNombreTipoDocumento(doc.tipo_documento_id) }}</td> 
+ <td>
+        <button pButton type="button" icon="pi pi-pencil" class="p-button-rounded p-button-warning"
+          (click)="editarDocumento(doc)">
+        </button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+  <div *ngIf="documentosTempData.length === 0" style="text-align:center; margin-top:1em;">
+    No hay documentos registrados.
+  </div>
+<p-dialog header="Editar Documento" [(visible)]="mostrarDialogoEditar" [modal]="true" [style]="{width: '400px'}">
+  <ng-template pTemplate="content">
+    <div class="field">
+      <label>Tipo de Documento</label>
+      <p-dropdown [options]="tipodocumentodata"
+                  [(ngModel)]="documentoEditando.tipo_documento_id"
+                  optionLabel="nombre_archivo"
+                  optionValue="id"></p-dropdown>
+    </div>
+    <div class="field">
+      <label>Archivo</label>
+      <input type="file" (change)="onFileEditSelect($event)">
+      <div *ngIf="documentoEditando.ruta_almacenamiento">
+        <a [href]="getDocumentoUrl(documentoEditando)" target="_blank">
+          {{ documentoEditando.ruta_almacenamiento }}
+        </a>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button pButton label="Cancelar" icon="pi pi-times" (click)="mostrarDialogoEditar=false"></button>
+    <button pButton label="Guardar" icon="pi pi-check" (click)="guardarEdicionDocumento()"></button>
+  </ng-template>
+</p-dialog>
+  
+</p-tabPanel>
+
+  <!-- ----------------------------FORMACION ACADEMICA ---------------------------- -->
+
+
+
+  <p-tabPanel >
+    <ng-template pTemplate="header">
+    <i class="pi pi-book icon-3d" style="margin-right:6px"></i> Formación Académica
+  </ng-template>
+  <!-- Formulario para agregar formación académica temporalmente -->
+  <form (ngSubmit)="agregarFormacionAcademicaTemp()" #formacionForm="ngForm" style="margin-bottom: 1em;">
+    <div class="field">
+      <label class="font-bold label-times">Institución:<span style="color:red">*</span></label>
+      <input type="text" pInputText placeholder="Nombre de la institución" [(ngModel)]="nuevaFormacionAcademica.institucion" name="institucion" required style="font-family: 'Times New Roman', Times, serif;" />
+    </div>
+    <div class="field">
+      <label class="font-bold label-times">Título Obtenido:<span style="color:red">*</span></label>
+      <input type="text" pInputText placeholder="Ej: Licenciado en Educación" [(ngModel)]="nuevaFormacionAcademica.titulo_obtenido" name="titulo" required style="font-family: 'Times New Roman', Times, serif;" />
+    </div>
+    <div class="field">
+      <label class="font-bold label-times">Número de Registro:<span style="color:red">*</span></label>
+      <input type="text" pInputText placeholder="Ej: SENESCYT-123456" [(ngModel)]="nuevaFormacionAcademica.n_registro" name="numero_registro" required style="font-family: 'Times New Roman', Times, serif;" />
+    </div>
+    <div class="field">
+      <label class="font-bold label-times">Especialidad:<span style="color:red">*</span></label>
+      <input type="text" pInputText placeholder="Ej: Matemáticas" [(ngModel)]="nuevaFormacionAcademica.especialidad" name="especialidad" required style="font-family: 'Times New Roman', Times, serif;" />
+    </div>
+    <div class="field">
+      <label class="font-bold label-times">Fecha de Registro:<span style="color:red">*</span></label>
+      <input type="date" pInputText [(ngModel)]="nuevaFormacionAcademica.fecha_registro" name="fecha_registro" required style="font-family: 'Times New Roman', Times, serif;" />
+    </div>
+  <button type="submit" [disabled]="!formacionForm.form.valid"
+  style="background-color: #21933c; color: white; border: none; padding: 0.4em 0; border-radius: 4px; width: 100%; font-size: 1.1em; height: 2.2em;">
+  Agregar Formación Académica
+</button>
+  </form>
+
+  <!-- Tabla temporal de formación académica -->
+  <p-table [value]="formacionAcademicaTempData" *ngIf="formacionAcademicaTempData.length > 0">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Institución</th>
+      <th>Título Obtenido</th>
+      <th>Número de Registro</th>
+      <th>Especialidad</th>
+      <th>Fecha de Registro</th>
+      <th>Acciones</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-formacion>
+    <tr>
+      <td>{{ formacion.institucion }}</td>
+      <td>{{ formacion.titulo_obtenido }}</td>
+      <td>{{ formacion.n_registro }}</td>
+      <td>{{ formacion.especialidad }}</td>
+      <td>{{ formacion.fecha_registro | date:'dd/MM/yyyy' }}</td>
+      <td>
+       <!-- ...existing code... -->
+<!-- Botón de editar formación académica en la columna de acciones -->
+<button
+  pButton
+  pRipple
+  type="button"
+  icon="pi pi-pencil"
+  class="p-button-rounded p-button-warning mr-2"
+  (click)="editarFormacionAcademica(formacion)"
+  title="Editar formación académica">
+</button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+  <div *ngIf="formacionAcademicaTempData.length === 0" style="text-align:center; margin-top:1em;">
+    No hay formación académica registrada.
+  </div>
+
+  <p-dialog header="Editar Formación Académica" [(visible)]="mostrarDialogoEditarFormacionAcademica" [modal]="true" [style]="{width: '400px'}">
+  <ng-template pTemplate="content">
+    <form>
+      <div class="field">
+        <label>Institución:</label>
+        <input type="text" pInputText [(ngModel)]="formacionAcademicaEditando.institucion" name="edit_institucion" />
+      </div>
+      <div class="field">
+        <label>Título Obtenido:</label>
+        <input type="text" pInputText [(ngModel)]="formacionAcademicaEditando.titulo_obtenido" name="edit_titulo_obtenido" />
+      </div>
+      <div class="field">
+
+        <label>Número de Registro:</label>
+        <input type="text" pInputText [(ngModel)]="formacionAcademicaEditando.n_registro" name="edit_n_registro" />
+      </div>
+      <div class="field">
+        <label>Especialidad:</label>
+        <input type="text" pInputText [(ngModel)]="formacionAcademicaEditando.especialidad" name="edit_especialidad" />
+      </div>
+      <div class="field">
+        <label>Fecha de Registro:</label>
+        <input type="date" pInputText [(ngModel)]="formacionAcademicaEditando.fecha_registro" name="edit_fecha_registro" />
+      </div>
+    </form>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button pButton label="Cancelar" icon="pi pi-times" (click)="mostrarDialogoEditarFormacionAcademica=false"></button>
+    <button pButton label="Guardar" icon="pi pi-check" (click)="guardarEdicionFormacionAcademica()"></button>
+  </ng-template>
+</p-dialog>
+</p-tabPanel>
+     </p-tabView>  
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+          <button pButton label="Cancelar" icon="pi pi-times" class="p-button-danger" (click)="hideDialog()"></button>
+          <button pButton label="Guardar" icon="pi pi-check" class="p-button-success" (click)="saveOrUpdateFuncionario()"></button>
+        </ng-template>
+    </p-dialog>
+    <p-dialog [(visible)]="showImageDialog" [modal]="true" [style]="{width: 'auto'}" [closable]="true" [dismissableMask]="true" header="Foto">
+  <img *ngIf="selectedImage" [src]="selectedImage" alt="Foto grande" style="max-width:100%; max-height:70vh; display:block; margin:auto;" />
+</p-dialog>
+ <!-- Dialogo de validación -->
+<!-- ...existing code... -->
+<p-dialog header="Validación" [(visible)]="mostrarDialogoValidacion" [modal]="true" [closable]="true" [style]="{width: '350px'}">
+  <p style="font-family: 'Times New Roman', Times, serif;">{{ mensajeValidacion }}</p>
+  <ng-template pTemplate="footer">
+    <button pButton label="Aceptar" icon="pi pi-check" (click)="mostrarDialogoValidacion=false"></button>
+  </ng-template>
+</p-dialog>
+  </div>
+</div>

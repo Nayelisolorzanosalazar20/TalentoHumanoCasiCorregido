@@ -1,0 +1,304 @@
+<style>
+  .tabla-alineada th {
+    text-align: left !important;
+    font-weight: bold;
+    font-family: 'Arial', Times, serif;
+    color: #000000;
+    white-space: nowrap;
+    font-size: 1.rem; /* Puedes aumentar este valor según lo que desees */
+  }
+</style>
+<div class="grid">
+  <div class="col-12">
+    <div class="card px-6 py-6" style="background-color: #e4f6e7;">
+      <p class="font-bold text-xl" style="color: #000000;">
+  <i class="pi pi-user" style="margin-right: 8px; color: #000000;"></i>
+  Datos Personales
+</p>
+
+<div class="grid">
+  <div class="col-12">
+    <div *ngFor="let funcionario of funcionariodata">
+<!-- Panel de Datos Personales -->
+<!-- Panel con pestañas para Datos Personales y Discapacidad -->
+<div class="card mb-4">
+  <p-tabView>
+    <p-tabPanel header="Datos de Funcionarios" leftIcon="pi pi-user">
+      <table class="table tarjetas-panel">
+         <div class="tarjeta-header">
+          <i class="pi pi-user" style="font-size: 2rem; color: #0ab638;"></i>
+          <span class="tarjeta-titulo" style="font-size: 1.5rem; color: #0ab638; font-weight: bold; font-family: 'Times New Roman', Times, serif;">Funcionario</span>
+        </div>
+         <div class="tarjeta-cuerpo">
+          <p><b>Cédula del Funcionario:</b> {{ funcionario.DNI }}</p>
+          <p><b>Nombres del Funcionario:</b> {{ funcionario.nombres }}</p>
+          <p><b>Apellidos del Funcionario:</b> {{ funcionario.apellidos }}</p>
+          <p><b>Edad del Funcionario:</b> {{ funcionario.edad }}</p>
+          <p><b>Nacionalidad del Funcionario:</b> {{ funcionario.nacionalidad }}</p>
+          <p><b>Fecha de Nacimiento:</b> {{ funcionario.fecha_nacimiento | date: 'dd/MM/yyyy' }}</p>
+          <p><b>Tipo de Sangre:</b> {{ funcionario.tipo_sangre }}</p>
+          <p><b>Dirección del Funcionario:</b> {{ funcionario.direccion }}</p>
+          <p><b>Dirección de Referencia:</b> {{ funcionario.direccion_referencia }}</p>
+          <p><b>Residencia del Funcionario:</b> {{ funcionario.residencia }}</p>
+          <p><b>Profesión del Funcionario:</b> {{ funcionario.profesion }}</p>
+          <p><b>Etnia del Funcionario:</b> {{ getNombreEtnia(funcionario.etnia_id ?? 0) }}</p>
+          <p><b>Estado Civil del Funcionario:</b> {{ getNombreEstadoCivil(funcionario.estado_civil_id ?? 0) }}</p>
+          <p><b>Género del Funcionario:</b> {{ getNombreGenero(funcionario.genero_id ?? 0) }}</p>
+         
+
+         </div>
+          <ng-template #sinDatosPersonales>
+      <div class="tarjeta-info tarjeta-vacia">
+        <i class="pi pi-info-circle"></i> No hay datos personales registrados.
+      </div>
+    </ng-template>
+      </table>
+    </p-tabPanel>
+
+
+    <p-tabPanel header="Discapacidad" leftIcon="pi pi-volume-down">
+      <table class="table tarjetas-panel">
+
+         <ng-container *ngIf="funcionario.discapacidad?.length; else sinDiscapacidad">
+
+               <div class="tarjeta-info" *ngFor="let disc of funcionario.discapacidad">
+                  <div class="tarjeta-header">
+                <i class="pi pi-volume-down" style="font-size: 2rem; color: #0ab638;"></i>
+                <span class="tarjeta-titulo" style="font-size: 1.5rem; color: #0ab638; font-weight: bold; font-family: 'Times New Roman', Times, serif;">Discapacidad</span>
+                </div>
+
+                   <div class="tarjeta-cuerpo">
+                    <p><b>Numero de Carnet:</b> {{ disc.Numero_carnet_discapacidad}}</p>
+                     <p><b>Tipo de Discapacidad:</b> {{ getNombreTipoDiscapacidad(disc.tipo_discapacidad_id) }}</p>
+                     <p><b>Grado de Discapacidad:</b> {{ getNombreGradoDiscapacidad(disc.grado_discapacidad_id) }}</p>
+                   </div>
+
+               </div>
+
+          </ng-container>
+
+          <ng-template #sinDiscapacidad>
+      <div class="tarjeta-info tarjeta-vacia">
+        <i class="pi pi-info-circle"></i> No hay discapacidades registradas.
+      </div>
+    </ng-template>
+       
+      </table>
+    </p-tabPanel>
+
+    <p-tabPanel header="Dirección" leftIcon="pi pi-map-marker">
+
+      <table class="table tarjetas-panel ">
+         <div class="tarjeta-header">
+          <i class="pi pi-map-marker" style="font-size: 2rem; color: #0ab638;"></i>
+          <span class="tarjeta-titulo" style="font-size: 1.5rem; color: #0ab638; font-weight: bold; font-family: 'Times New Roman', Times, serif;">Dirección</span>
+        </div>
+                 <div class="tarjeta-cuerpo">
+
+                  <p><b>Dirección:</b> {{ funcionario.direccion }}  </p>
+        <p><b>Dirección de Referencia:</b> {{ funcionario.direccion_referencia }}</p>
+        <p><b>Residencia:</b> {{ funcionario.residencia }}</p>
+        <p><b>Parroquia:</b> {{ getNombreParroquia(funcionario.parroquia_id ?? 0) }}</p>
+                 </div>
+
+                 <ng-template #sinDireccion>
+      <div class="tarjeta-info tarjeta-vacia">
+        <i class="pi pi-info-circle"></i> No hay direcciones registradas.
+      </div>
+    </ng-template>
+      </table>
+    </p-tabPanel>
+
+
+    <p-tabPanel header="Contratos" leftIcon="pi pi-file">
+
+      <table class="table tarjetas-panel">
+        <div class="tarjeta-header">
+          <i class="pi pi-file" style="font-size: 2rem; color: #0ab638;"></i>
+          <span class="tarjeta-titulo" style="font-size: 1.5rem; color: #0ab638; font-weight: bold; font-family: 'Times New Roman', Times, serif;">Contratos</span>
+        </div>
+         <div class="tarjeta-cuerpo">
+          <p><b>Fecha Inicio de Contrato:</b> {{ funcionario.fecha_inicio_contrato | date: 'dd/MM/yyyy' }}</p>
+          <p><b>Fecha Fin de Contrato:</b> {{ funcionario.fecha_fin_contrato | date: 'dd/MM/yyyy' }}</p>
+         </div>
+
+        <ng-template #sinContratos>
+      <div class="tarjeta-info tarjeta-vacia">
+        <i class="pi pi-info-circle"></i> No hay contratos registrados.
+      </div>
+    </ng-template>
+      </table>
+    </p-tabPanel>
+
+
+    <p-tabPanel header="Contactos" leftIcon="pi pi-users">
+  <table class="table tarjetas-panel">
+     <ng-container *ngIf="funcionario.contactos?.length; else sinContactos">
+
+      <div class="tarjeta-info" *ngFor="let contacto of funcionario.contactos">
+            <div class="tarjeta-header">
+          <i class="pi pi-users" style="font-size: 2rem; color: #0ab638;"></i>
+          <span class="tarjeta-titulo" style="font-size: 1.5rem; color: #0ab638; font-weight: bold; font-family: 'Times New Roman', Times, serif;">Contactos</span>
+        </div>
+
+        <div class="tarjeta-cuerpo">
+          <p><b>Teléfono Personal:</b> {{ contacto.telefono_personal }}</p>
+          <p><b>Teléfono de Emergencia:</b> {{ contacto.telefono_emergencia }}</p>
+          <p><b>Teléfono de Domicilio:</b> {{ contacto.telefono_domicilio }}</p>
+          <p><b>Email Personal:</b> {{ contacto.correo_personal }}</p>
+          <p><b>Email Institucional:</b> {{ contacto.correo_institucional }}</p>
+          <p><b>Persona de Emergencia:</b> {{ contacto.nombre_persona_emergencia }}</p>
+          <p><b>Relación con Persona de Emergencia:</b> {{ contacto.parentesco_emergencia }}</p>
+        </div>
+      </div>
+
+    </ng-container>
+
+     <ng-template #sinContactos>
+      <div class="tarjeta-info tarjeta-vacia">
+        <i class="pi pi-info-circle"></i> No hay contactos registrados.
+      </div>
+    </ng-template>
+  </table>
+</p-tabPanel>
+
+    <p-tabPanel header="Trayectoria Laboral" leftIcon="pi pi-briefcase">
+      <table class="tarjetas-panel">
+        <ng-container *ngIf="funcionario.trayectoria_laboral?.length; else sinTrayectoriaLaboral">
+          
+          <div class="tarjeta-info" *ngFor="let trayectoria of funcionario.trayectoria_laboral">
+            <div class="tarjeta-header">
+          <i class="pi pi-briefcase" style="font-size: 2rem; color: #0ab638;"></i>
+          <span class="tarjeta-titulo" style="font-size: 1.5rem; color: #0ab638; font-weight: bold; font-family: 'Times New Roman', Times, serif;">Trayectoria Laboral</span>
+        </div>
+        <div class="tarjeta-cuerpo">
+          <p><b>Nombre de Institución:</b> {{ trayectoria.nombre_institucion }}</p>
+          <p><b>Fecha de Ingreso:</b> {{ trayectoria.fecha_ingreso | date: 'dd/MM/yyyy' }}</p>
+          <p><b>Fecha de Salida:</b> {{ trayectoria.fecha_salida | date: 'dd/MM/yyyy' }}</p>
+          <p><b>Cargo Ocupado:</b> {{ trayectoria.nombre_cargo }}</p>
+          </div>
+          </div>
+
+          </ng-container>
+
+          <ng-template #sinTrayectoriaLaboral>
+      <div class="tarjeta-info tarjeta-vacia">
+        <i class="pi pi-info-circle"></i> No hay trayectorias laborales registradas.
+      </div>
+    </ng-template>
+        </table>
+    </p-tabPanel>
+
+    <p-tabPanel header="Capacitaciones" leftIcon="pi pi-graduation-cap">
+  <div class="tarjetas-panel">
+    <ng-container *ngIf="funcionario.capacitaciones?.length; else sinCapacitaciones">
+      <div class="tarjeta-info" *ngFor="let cap of funcionario.capacitaciones">
+        <div class="tarjeta-header">
+          <i class="pi pi-book" style="font-size: 2rem; color: #0ab638;"></i>
+          <span class="tarjeta-titulo" style="font-size: 1.5rem; color: #0ab638; font-weight: bold; font-family: 'Times New Roman', Times, serif;">Capacitación</span>
+        </div>
+        <div class="tarjeta-cuerpo">
+          <p><b>Nombre de Capacitación:</b> {{ cap.descripcion }}</p>
+          <p><b>Fecha de Inicio:</b> {{ cap.fecha_inicio | date: 'dd/MM/yyyy' }}</p>
+          <p><b>Fecha de Fin:</b> {{ cap.fecha_fin | date: 'dd/MM/yyyy' }}</p>
+          <p><b>Horas:</b> {{ cap.n_horas }}</p>
+          
+  <b>Archivo de Capacitación:</b>
+  <ng-container *ngIf="cap.ruta_almacenamiento; else sinArchivo">
+    <a [href]="'http://localhost:5000/uploads/capacitaciones/' + cap.ruta_almacenamiento" target="_blank">
+      Ver archivo
+    </a>
+  </ng-container>
+  <ng-template #sinArchivo>
+    No disponible
+  </ng-template>
+
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #sinCapacitaciones>
+      <div class="tarjeta-info tarjeta-vacia">
+        <i class="pi pi-info-circle"></i> No hay capacitaciones registradas.
+      </div>
+    </ng-template>
+  </div>
+</p-tabPanel>
+
+
+    <p-tabPanel header="Información Bancaria" leftIcon="pi pi-credit-card">
+      <table class="tarjetas-panel">
+             <ng-container *ngIf="funcionario.informacion_bancaria?.length; else sinInformacionBancaria">
+
+         <div class="tarjeta-header">
+          <i class="pi pi-credit-card" style="font-size: 2rem; color: #0ab638;"></i>
+          <span class="tarjeta-titulo" style="font-size: 1.5rem; color: #0ab638; font-weight: bold; font-family: 'Times New Roman', Times, serif;">Información de Pago</span>
+        </div>
+        <div class="tarjeta-cuerpo">
+          <p><b>Nombre del Banco:</b> {{ funcionario.informacion_bancaria?.[0]?.nombre_institucion }}</p>
+          <p><b>Tipo de Cuenta:</b> {{ funcionario.informacion_bancaria?.[0]?.tipo_cuenta}}</p>
+          <p><b>Número de Cuenta:</b> {{ funcionario.informacion_bancaria?.[0]?.numero_cuenta}}</p>
+        </div>
+         </ng-container>
+        <ng-template #sinInformacionBancaria>
+      <div class="tarjeta-info tarjeta-vacia">
+        <i class="pi pi-info-circle"></i> No hay información bancaria registrada.
+      </div>
+    </ng-template>
+</table>
+    </p-tabPanel>
+    <p-tabPanel header="Documentos" leftIcon="pi pi-file">
+  <div class="tarjetas-panel">
+     <ng-container *ngIf="funcionario.documentos?.length; else sinDocumentos">
+    <div class="tarjeta-info" *ngFor="let doc of funcionario.documentos">
+      <div class="tarjeta-header">
+          <i class="pi pi-file" style="font-size: 2rem; color: #0ab638;"></i>
+          <span class="tarjeta-titulo" style="font-size: 1.5rem; color: #0ab638; font-weight: bold; font-family: 'Times New Roman', Times, serif;">Documentos</span>
+        </div>
+        <div class="tarjeta-cuerpo">
+          <p><b>Tipo de Documento:</b> {{ getNombreTipoDocumento(doc.tipo_documento_id) }}</p>
+          <p><b>Archivo de Documentos:</b>
+            <a *ngIf="doc.ruta_almacenamiento" 
+               [href]="'http://localhost:5000/uploads/documentos/' + doc.ruta_almacenamiento" 
+               target="_blank">
+              Ver archivo
+            </a>
+            <span *ngIf="!doc.ruta_almacenamiento">No disponible</span>
+          </p>
+</div>
+      </div>
+    </ng-container>
+    <ng-template #sinDocumentos>
+      <div class="tarjeta-info tarjeta-vacia">
+        <i class="pi pi-info-circle"></i> No hay documentos registrados.
+      </div>
+    </ng-template>
+
+  </div>
+</p-tabPanel>
+
+    <p-tabPanel header="Formación Académica" leftIcon="pi pi-graduation-cap">
+    <div class="tarjetas-panel">
+           <ng-container *ngIf="funcionario.formacion_academica?.length; else sinFormacionAcademica">
+<div class="tarjeta-info" *ngFor="let doc of funcionario.formacion_academica">
+  <div class="tarjeta-header">
+    <i class="pi pi-graduation-cap" style="font-size: 2rem; color: #0ab638;"></i>
+    <span class="tarjeta-titulo" style="font-size: 1.5rem; color: #0ab638; font-weight: bold; font-family: 'Times New Roman', Times, serif;">Formación Académica</span>
+  </div>
+  <div class="tarjeta-cuerpo">
+        <p><b>Nombre de Institución:</b> {{ funcionario.formacion_academica?.[0]?.institucion }}</p>
+        <p><b>Título Obtenido:</b> {{ funcionario.formacion_academica?.[0]?.titulo_obtenido }}</p>
+        <p><b>Número de Registro:</b> {{ funcionario.formacion_academica?.[0]?.n_registro}}</p>
+        <p><b>Especialidad:</b> {{ funcionario.formacion_academica?.[0]?.especialidad }}</p>
+        <p><b>Fecha de Registro:</b> {{ funcionario.formacion_academica?.[0]?.fecha_registro ? (funcionario.formacion_academica?.[0]?.fecha_registro | date: 'dd/MM/yyyy') : '' }}</p>
+           </div>
+      </div>
+        </ng-container>
+
+     <ng-template #sinFormacionAcademica>
+      <div class="tarjeta-info tarjeta-vacia">
+        <i class="pi pi-info-circle"></i> No hay formación académica registrada.
+     </div>
+    </ng-template>
+
+  </div>
+</p-tabPanel>

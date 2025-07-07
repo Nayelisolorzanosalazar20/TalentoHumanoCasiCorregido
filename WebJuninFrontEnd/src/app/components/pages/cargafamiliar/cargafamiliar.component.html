@@ -1,0 +1,95 @@
+<!-- cargafamiliar.component.html -->
+<div class="grid">
+  <div class="col-12">
+    <div class="card px-6 py-6">
+
+      <p class="font-bold text-xl">CARGAS FAMILIARES</p>
+
+      <!-- Toolbar with New Button -->
+      <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+          <div class="my-2">
+            <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-success mr-2"
+              (click)="openNew()"></button>
+          </div>
+        </ng-template>
+      </p-toolbar>
+
+      <!-- Tabla de cargas familiares -->
+      <p-table #dt [value]="cargaFamiliarData" responsiveLayout="scroll" [rows]="10"
+        [globalFilterFields]="['id', 'nombre_persona', 'cedula', 'nivel_educativo', 'parentesco']" [paginator]="true"
+        [rowsPerPageOptions]="[5, 10, 20]" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" selectionMode="multiple"
+        [rowHover]="true" dataKey="id">
+
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="id" style="text-align: center;">ID</th> 
+            <th pSortableColumn="cedula" style="text-align: center;">Cédula</th>
+            <th pSortableColumn="nombre_persona" style="text-align: center;">Nombres y Apellidos</th>
+            <th pSortableColumn="nivel_educativo" style="text-align: center;">Nivel educativo</th>
+            <th pSortableColumn="parentesco" style="text-align: center;">Parentesco</th>
+            <th style="text-align: center;">Acciones</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-datos>
+          <tr>
+            <td style="text-align: center;">{{ datos.id }}</td> 
+            <td style="text-align: center;">{{ datos.cedula }}</td>
+            <td style="text-align: center;">{{ datos.nombre_persona }}</td>
+            <td style="text-align: center;">{{ datos.nivel_educativo }}</td>
+            <td style="text-align: center;">{{ datos.parentesco }}</td>
+           
+            
+              <td class="action-buttons-cell" style="width:10%; min-width:10rem; text-align: center;">
+              <button pButton pRipple icon="pi pi-eye" severity="info" (click)="editCargaFamiliar(datos)"> Mas
+                Inf</button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+    <!-- Dialogo de carga familiar -->
+    <p-dialog [(visible)]="cargaFamiliarDialog" [style]="{width: '500px'}" header="Datos de Carga Familiar" [modal]="true" class="p-fluid">
+      <ng-template pTemplate="content">
+       
+    
+        <div class="field">
+          <label for="cedula"class="font-bold">Cédula:</label>
+          <input type="text" pInputText id="cedula" [(ngModel)]="cargaFamiliar.cedula" required
+            placeholder="Ingrese la cédula"
+          [ngClass]="{'ng-invalid ng-dirty' : submitted && !cargaFamiliar.cedula}" style="font-family: 'Times New Roman', Times, serif;" />
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !cargaFamiliar.cedula">Cédula es requerida.</small>
+        </div>
+        <div class="field">
+          <label for="nombre_persona"class="font-bold">Nombre y Apellido:</label>
+          <input type="text" pInputText id="nombre_persona" [(ngModel)]="cargaFamiliar.nombre_persona" required
+            placeholder="Ingrese el nombre y apellido"
+          [ngClass]="{'ng-invalid ng-dirty' : submitted && !cargaFamiliar.nombre_persona}" style="font-family: 'Times New Roman', Times, serif;" />
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !cargaFamiliar.nombre_persona">Nombre es requerido.</small>
+        </div>
+        <div class="field">
+          <label for="nivel_educativo"class="font-bold">Nivel educativo:</label>
+          <input type="text" pInputText id="nivel_educativo" [(ngModel)]="cargaFamiliar.nivel_educativo" required
+            placeholder="Ingrese el nivel educativo"
+          [ngClass]="{'ng-invalid ng-dirty' : submitted && !cargaFamiliar.nivel_educativo}" style="font-family: 'Times New Roman', Times, serif;"  />
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !cargaFamiliar.nivel_educativo">Nivel educativo es requerido.</small>
+        </div>
+        <div class="field">
+          <label for="parentesco"class="font-bold">Parentesco:</label>
+          <input type="text" pInputText id="parentesco" [(ngModel)]="cargaFamiliar.parentesco" required
+           placeholder="Ingrese el parentesco"
+          [ngClass]="{'ng-invalid ng-dirty' : submitted && !cargaFamiliar.parentesco}" style="font-family: 'Times New Roman', Times, serif;" />
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !cargaFamiliar.parentesco">Parentesco es requerido.</small>
+        </div>
+
+      </ng-template>
+      <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-danger" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-success" (click)="saveOrUpdateCargaFamiliar()"></button>
+      </ng-template>
+    </p-dialog>
+  </div>
+</div>

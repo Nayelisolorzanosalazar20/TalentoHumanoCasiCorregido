@@ -1,0 +1,67 @@
+<div class="grid">
+  <div class="col-12">
+    <div class="card px-6 py-6">
+
+      <p class="font-bold text-xl">GRADO DISCAPACIDAD</p>
+
+      <!-- Toolbar with New Button -->
+      <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+          <div class="my-2">
+            <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+          </div>
+        </ng-template>
+      </p-toolbar>
+
+      <!-- Table for grado discapacidad Data -->
+      <p-table #dt [value]="gradodata" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id', 'grado']" [paginator]="true"
+               [rowsPerPageOptions]="[5, 10, 20]" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+               selectionMode="multiple" [rowHover]="true" dataKey="id">
+
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="Id" style="text-align: center;">ID</th>
+            <th pSortableColumn="Grado" style="text-align: center;">Grado de discapacidad</th>
+            <th pSortableColumn="Acciones" style="text-align: center;">Acciones</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-datos>
+          <tr>
+            <td style="width:14%; min-width:30rem; text-align: center;">
+              <span class="p-column-title">Id</span>
+              {{ datos.id }}
+            </td>
+            <td style="width:14%; min-width:10rem; text-align: center;">
+              <span class="p-column-title">Grado</span>
+              {{ datos.grado }}
+            </td>
+            <td class="action-buttons-cell" style="text-align: center;">
+              <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning mr-2" (click)="editGrado(datos)"></button>
+              <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteGrado(datos.id)"></button>
+            </td>
+          </tr>
+        </ng-template>
+
+      </p-table>
+
+    </div>
+
+    <!-- Grado Dialog -->
+    <p-dialog [(visible)]="gradodiscapacidadDialog" [style]="{width:'700px'}" header="Grado de discapacidad" [modal]="true" class="p-fluid">
+      <ng-template pTemplate="content">
+        <div class="field">
+          <label for="grado">Descripción: </label>
+          <input type="text" pInputText id="grado" placeholder="Ingrese su grado de discapacidad" [(ngModel)]="grado.grado" required autofocus
+                 [ngClass]="{'ng-invalid ng-dirty' : submitted && !grado.grado}"style="font-family: 'Times New Roman', Times, serif;" />
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !grado.grado">Grado discapacidad es un campo requerido.</small>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-danger" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-success" (click)="saveOrUpdateGrado()"></button>
+      </ng-template>
+    </p-dialog>
+  </div>
+</div>

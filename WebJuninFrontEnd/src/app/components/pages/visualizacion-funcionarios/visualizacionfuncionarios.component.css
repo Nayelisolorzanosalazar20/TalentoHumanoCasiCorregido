@@ -1,0 +1,157 @@
+/* Contenedor principal */
+.card.mb-4, .card {
+  margin: 0 auto;
+  max-width: 800px;
+  background: #f4f8f6;
+  border-radius: 20px;
+  box-shadow: 0 6px 32px rgba(44, 62, 80, 0.13);
+  padding: 2.5rem 2rem;
+  text-align: center;
+  border: 1px solid #e0f2e9;
+  transition: box-shadow 0.3s;
+}
+.card.mb-4:hover, .card:hover {
+  box-shadow: 0 10px 40px rgba(44, 62, 80, 0.18);
+}
+
+/* Título destacado */
+.font-bold.text-xl, .card.mb-4 p, .card p {
+  text-align: center;
+  font-size: 2.2rem;
+  color: #219150;
+  margin-bottom: 1.7rem;
+  font-weight: bold;
+  letter-spacing: 1.5px;
+  font-family: 'Segoe UI', 'Arial', sans-serif;
+  text-shadow: 0 2px 8px #e0f2e9;
+}
+
+/* Tablas modernas */
+.table {
+  margin: 0 auto 2rem auto;
+  width: 95%;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(44, 62, 80, 0.09);
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  font-family: 'Segoe UI', 'Arial', sans-serif;
+}
+
+/* Encabezados de tabla */
+.table th, .tabla-alineada th {
+  background: linear-gradient(90deg, #b7f8db 0%, #50c878 100%);
+  color: #17643a;
+  font-weight: bold;
+  text-align: left !important;
+  padding: 16px 22px;
+  border-bottom: 2px solid #e0e0e0;
+  font-size: 1.25rem;
+  font-family: 'Times New Roman', Times, serif;
+  white-space: nowrap;
+  letter-spacing: 0.5px;
+  border-right: 1px solid #e0f2e9;
+}
+.table th:last-child, .tabla-alineada th:last-child {
+  border-right: none;
+}
+
+/* Celdas de tabla */
+.table td {
+  text-align: left !important;
+  padding: 14px 20px;
+  font-size: 1.13rem;
+  color: #2e3d49;
+  border-bottom: 1px solid #f0f0f0;
+  background: #fcfefd;
+  vertical-align: middle;
+}
+
+/* Última fila sin borde */
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Bordes redondeados para la tabla */
+.table tr:first-child th:first-child {
+  border-top-left-radius: 16px;
+}
+.table tr:first-child th:last-child {
+  border-top-right-radius: 16px;
+}
+.table tr:last-child td:first-child {
+  border-bottom-left-radius: 16px;
+}
+.table tr:last-child td:last-child {
+  border-bottom-right-radius: 16px;
+}
+
+/* Color de fondo alterno para filas */
+.table tr:nth-child(even) td {
+  background: #f6fbf7;
+}
+
+/* Responsive para móviles */
+@media (max-width: 900px) {
+  .card.mb-4, .card {
+    max-width: 99vw;
+    padding: 1.2rem 0.4rem;
+  }
+  .table {
+    width: 100%;
+    font-size: 1rem;
+  }
+  .table th, .table td {
+    padding: 10px 6px;
+    font-size: 1rem;
+  }
+}
+
+/* TabPanel PrimeNG mejorado */
+:host ::ng-deep .p-tabview-nav li .p-tabview-nav-link {
+  font-size: 1.15rem !important;
+  color: #219150 !important;
+  font-weight: bold;
+  background: #e8f5e9 !important;
+  border-radius: 10px 10px 0 0 !important;
+  margin-right: 2px;
+  transition: background 0.2s, color 0.2s;
+}
+:host ::ng-deep .p-tabview-nav li.p-highlight .p-tabview-nav-link {
+  background: linear-gradient(90deg, #b7f8db 0%, #50c878 100%) !important;
+  color: #fff !important;
+}
+
+/* Botones centrados en los paneles */
+:host ::ng-deep .p-tabview .p-tabview-panels {
+  text-align: center;
+}
+
+/* Mejoras para los th alineados a la izquierda y en verde */
+.tabla-alineada th {
+  text-align: left !important;
+  white-space: nowrap;
+  font-size: 1.25rem;
+  font-family: 'Times New Roman', Times, serif;
+  color: #219150;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  background: none;
+  border-right: 1px solid #e0f2e9;
+}
+.tabla-alineada th:last-child {
+  border-right: none;
+}
+.tabla-alineada th,
+.tabla-alineada td {
+  padding-top: 23px;
+  padding-bottom: 18px;
+  padding-left: 18px;
+  padding-right: 18px;
+}
+:host ::ng-deep .p-tabview-panels {
+  background: linear-gradient(135deg, #b7f8db 0%, #50c878 100%) !important; /* Fondo verde degradado */
+  border-radius: 0 0 16px 16px;
+  padding: 2rem 1.5rem;
+}

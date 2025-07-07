@@ -1,0 +1,68 @@
+<div class="grid">
+  <div class="col-12">
+    <div class="card px-6 py-6">
+
+      <p class="font-bold text-xl">TIPO DISCAPACIDAD</p>
+
+      <!-- Toolbar with New Button -->
+      <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+          <div class="my-2">
+            <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+          </div>
+        </ng-template>
+      </p-toolbar>
+
+      <!-- Table for Etnia Data -->
+      <p-table #dt [value]="tipodiscapacidaddata" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id', 'descripcion']" [paginator]="true"
+               [rowsPerPageOptions]="[5, 10, 20]" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+               selectionMode="multiple" [rowHover]="true" dataKey="id">
+
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="Id" style="text-align: center;">ID</th>
+            <th pSortableColumn="Descripcion" style="text-align: center;">Tipo de discapacidad</th>
+            <th pSortableColumn="Acciones" style="text-align: center;">Acciones</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-datos>
+          <tr>
+            <td style="width:14%; min-width:30rem; text-align: center;">
+              <span class="p-column-title">Id</span>
+              {{ datos.id }}
+            </td>
+            <td style="width:14%; min-width:10rem; text-align: center;">
+              <span class="p-column-title">Descripción</span>
+              {{ datos.descripcion }}
+            </td>
+           
+            <td class="action-buttons-cell" style="text-align: center;">
+              <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning mr-2" (click)="editTipodiscapacidad(datos)"></button>
+              <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteTipodiscapacidad(datos.id)"></button>
+            </td>
+          </tr>
+        </ng-template>
+
+      </p-table>
+
+    </div>
+
+    <!-- Tipodiscapacidad Dialog -->
+    <p-dialog [(visible)]="TipodiscapacidadDialog" [style]="{width:'700px'}" header="Tipo de discapacidad" [modal]="true" class="p-fluid">
+      <ng-template pTemplate="content">
+        <div class="field">
+          <label for="descripcion"class="font-bold">Descripción: </label>
+          <input type="text" pInputText id="descripcion" placeholder="Ingrese su tipo de discapacidad" [(ngModel)]="tcapacidad.descripcion" required autofocus
+                 [ngClass]="{'ng-invalid ng-dirty' : submitted && !tcapacidad.descripcion}"style="font-family: 'Times New Roman', Times, serif;" />
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !tcapacidad.descripcion">Nombre del tipo de discapacidad es un campo requerido.</small>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-danger" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-success" (click)="saveOrUpdateTipodiscapacidad()"></button>
+      </ng-template>
+    </p-dialog>
+  </div>
+</div>

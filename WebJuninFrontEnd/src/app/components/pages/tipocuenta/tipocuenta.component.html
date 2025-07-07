@@ -1,0 +1,85 @@
+<div class="grid">
+  <div class="col-12">
+    <div class="card px-6 py-6">
+
+      <p class="font-bold text-xl">TIPO DE CUENTA</p>
+
+      <!-- Toolbar with New Button -->
+      <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+          <div class="my-2">
+            <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+          </div>
+        </ng-template>
+      </p-toolbar>
+
+      <!-- Table for TipoCuenta Data -->
+      <p-table #dt [value]="tipoCuentaData" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id', 'codigo', 'descripcion', 'nombre', 'estado']" [paginator]="true"
+               [rowsPerPageOptions]="[5, 10, 20]" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+               selectionMode="multiple" [rowHover]="true" dataKey="id">
+
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="id" style="text-align: center;">ID</th>
+            <th pSortableColumn="codigo" style="text-align: center;">Código</th>
+            <th pSortableColumn="nombre" style="text-align: center;">Nombre</th>
+            <th pSortableColumn="descripcion" style="text-align: center;">Descripción</th>
+            <th pSortableColumn="estado" style="text-align: center;">Estado</th>
+            <th style="text-align: center;">Acciones</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-datos>
+          <tr>
+            <td style="text-align: center;">{{ datos.id }}</td>
+            <td style="text-align: center;">{{ datos.codigo }}</td>
+            <td style="text-align: center;">{{ datos.nombre }}</td>
+            <td style="text-align: center;">{{ datos.descripcion }}</td>
+            <td style="text-align: center;">{{ datos.estado }}</td>
+            <td class="action-buttons-cell" style="text-align: center;">
+              <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning mr-2" (click)="editTipoCuenta(datos)"></button>
+              <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteTipoCuenta(datos.id)"></button>
+            </td>
+          </tr>
+        </ng-template>
+
+      </p-table>
+
+    </div>
+
+    <!-- TipoCuenta Dialog -->
+    <p-dialog [(visible)]="tipoCuentaDialog" [style]="{width:'700px'}" header="Tipo de cuenta" [modal]="true" class="p-fluid">
+      <ng-template pTemplate="content">
+        <div class="field">
+          <label for="codigo" class="font-bold">Código: </label>
+          <input type="text" pInputText id="codigo" placeholder="Ingrese el código" [(ngModel)]="tipoCuenta.codigo" required
+                 [ngClass]="{'ng-invalid ng-dirty' : submitted && !tipoCuenta.codigo}" style="font-family: 'Times New Roman', Times, serif;" />
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !tipoCuenta.codigo">El código es requerido.</small>
+        </div>
+        <div class="field">
+          <label for="nombre" class="font-bold">Nombre: </label>
+          <input type="text" pInputText id="nombre" placeholder="Ingrese el nombre" [(ngModel)]="tipoCuenta.nombre" required
+                 [ngClass]="{'ng-invalid ng-dirty' : submitted && !tipoCuenta.nombre}" style="font-family: 'Times New Roman', Times, serif;" />
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !tipoCuenta.nombre">El nombre es requerido.</small>
+        </div>
+        <div class="field">
+          <label for="descripcion" class="font-bold">Descripción: </label>
+          <input type="text" pInputText id="descripcion" placeholder="Ingrese la descripción" [(ngModel)]="tipoCuenta.descripcion" required
+                 [ngClass]="{'ng-invalid ng-dirty' : submitted && !tipoCuenta.descripcion}" style="font-family: 'Times New Roman', Times, serif;" />
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !tipoCuenta.descripcion">La descripción es requerida.</small>
+        </div>
+        <div class="field">
+          <label for="estado" class="font-bold">Estado: </label>
+          <input type="text" pInputText id="estado" placeholder="Ingrese el estado" [(ngModel)]="tipoCuenta.estado" required
+                 [ngClass]="{'ng-invalid ng-dirty' : submitted && !tipoCuenta.estado}" style="font-family: 'Times New Roman', Times, serif;" />
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !tipoCuenta.estado">El estado es requerido.</small>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-danger" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-success" (click)="saveOrUpdateTipoCuenta()"></button>
+      </ng-template>
+    </p-dialog>
+  </div>
+</div>

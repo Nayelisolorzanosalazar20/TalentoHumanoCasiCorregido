@@ -1,0 +1,92 @@
+<div class="grid">
+  <div class="col-12">
+    <div class="card px-6 py-6" style="background-color: #ffffff;">
+      <p class="font-bold text-xl">TRAYECTORIAS LABORALES</p>
+
+      <!-- Toolbar -->
+      <p-toolbar styleClass="mb-6">
+        <ng-template pTemplate="left">
+          <div class="my-2">
+            <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+          </div>
+        </ng-template>
+      </p-toolbar>
+
+      <!-- Tabla -->
+      <p-table #dt [value]="trayectoriadata" responsiveLayout="scroll"
+               [rows]="10" [paginator]="true"
+               [rowsPerPageOptions]="rowsPerPageOptions"
+               [showCurrentPageReport]="true"
+               currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+               selectionMode="multiple" [rowHover]="true" dataKey="id">
+
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="id" style="text-align: center;">ID</th>
+            <th pSortableColumn="nombre_institucion" style="text-align: center;">Institución</th>
+            <th pSortableColumn="fecha_ingreso" style="text-align: center;">Fecha Ingreso</th>
+            <th pSortableColumn="fecha_salida" style="text-align: center;">Fecha Salida</th>
+            <th pSortableColumn="nombre_cargo" style="text-align: center;">Cargo</th>
+            <th style="text-align: center;">Acciones</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-tray>
+          <tr>
+            <td style="text-align: center;">{{ tray.id }}</td>
+            <td style="text-align: center;">{{ tray.nombre_institucion }}</td>
+            <td style="text-align: center;">{{ tray.fecha_ingreso | date:'yyyy-MM-dd'  }}</td>
+            <td style="text-align: center;">{{ tray.fecha_salida | date:'yyyy-MM-dd' }}</td>
+            <td style="text-align: center;">{{ tray.nombre_cargo }}</td>
+            <td style="text-align: center;">
+              <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning mr-2" (click)="editTrayectoria(tray)"></button>
+              <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteTrayectoria(tray.id)"></button>
+            </td>
+          </tr>
+        </ng-template>
+
+      </p-table>
+    </div>
+
+    <!-- Diálogo para Crear/Editar Trayectoria -->
+    <p-dialog [(visible)]="TrayectoriaDialog" [style]="{width:'600px'}" header="Trayectoria" [modal]="true" class="p-fluid">
+      <ng-template pTemplate="content">
+        <div class="field">
+          <label for="nombre_institucion" class="font-bold">Nombre de la Institución</label>
+          <input type="text" pInputText id="nombre_institucion" [(ngModel)]="trayectoria.nombre_institucion" required
+                 [ngClass]="{'ng-invalid ng-dirty': submitted && !trayectoria.nombre_institucion}"
+                 placeholder="Nombre de la institución" style="width: 100%;"style="font-family: 'Times New Roman', Times, serif;" />
+          <small class="ng-invalid" *ngIf="submitted && !trayectoria.nombre_institucion">Campo requerido</small>
+        </div>
+
+        <div class="field">
+          <label for="fecha_ingreso" class="font-bold">Fecha de Ingreso</label>
+          <input type="date" pInputText id="fecha_ingreso" [(ngModel)]="trayectoria.fecha_ingreso" required
+                 [ngClass]="{'ng-invalid ng-dirty': submitted && !trayectoria.fecha_ingreso}" style="font-family: 'Times New Roman', Times, serif;"/>
+          <small class="ng-invalid" *ngIf="submitted && !trayectoria.fecha_ingreso">Campo requerido</small>
+        </div>
+
+        <div class="field">
+          <label for="fecha_salida" class="font-bold">Fecha de Salida</label>
+          <input type="date" pInputText id="fecha_salida" [(ngModel)]="trayectoria.fecha_salida" required
+                 [ngClass]="{'ng-invalid ng-dirty': submitted && !trayectoria.fecha_salida}" style="font-family: 'Times New Roman', Times, serif;"/>
+          <small class="ng-invalid" *ngIf="submitted && !trayectoria.fecha_salida">Campo requerido</small>
+        </div>
+
+        <div class="field">
+          <label for="nombre_cargo" class="font-bold">Nombre del Cargo</label>
+          <input type="text" pInputText id="nombre_cargo" [(ngModel)]="trayectoria.nombre_cargo" required
+                 [ngClass]="{'ng-invalid ng-dirty': submitted && !trayectoria.nombre_cargo}" placeholder="Cargo ocupado"  style="width: 100%;" style="font-family: 'Times New Roman', Times, serif;"/>
+          <small class="ng-invalid" *ngIf="submitted && !trayectoria.nombre_cargo">Campo requerido</small>
+        </div>
+
+     
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-danger" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-success" (click)="saveOrUpdateTrayectoria()"></button>
+      </ng-template>
+    </p-dialog>
+  </div>
+</div>

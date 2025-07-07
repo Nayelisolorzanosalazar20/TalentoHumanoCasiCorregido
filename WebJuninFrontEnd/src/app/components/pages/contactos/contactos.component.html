@@ -1,0 +1,141 @@
+<div class="grid">
+  <div class="col-12">
+    <div class="card px-6 py-6" style="background-color: #ffffff;">
+      <p class="font-bold text-xl">CONTACTOS</p>
+
+      <!-- Toolbar -->
+      <p-toolbar styleClass="mb-6">
+        <ng-template pTemplate="left">
+          <div class="my-2">
+            <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+          </div>
+        </ng-template>
+      </p-toolbar>
+
+      <!-- Tabla -->
+      <p-table #dt [value]="contactosdata" responsiveLayout="scroll"
+               [rows]="10" [paginator]="true"
+               [rowsPerPageOptions]="[5,10,20]"
+               [globalFilterFields]="['id','telefono_personal','telefono_domicilio','telefono_emergencia','correo_personal','correo_institucional','nombre_persona_emergencia','parentesco_emergencia']"
+               [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+               selectionMode="multiple" [rowHover]="true" dataKey="id">
+
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="id" style="text-align: center;">ID</th>
+            <th pSortableColumn="telefono_personal" style="text-align: center;">Teléfono Personal</th>
+            <th pSortableColumn="telefono_domicilio" style="text-align: center;">Teléfono Domicilio</th>
+            <th pSortableColumn="telefono_emergencia" style="text-align: center;">Teléfono Emergencia</th>
+            <th pSortableColumn="correo_personal" style="text-align: center;">Correo Personal</th>
+            <th pSortableColumn="correo_institucional" style="text-align: center;">Correo Institucional</th>
+            <th pSortableColumn="nombre_persona_emergencia" style="text-align: center;">Persona Emergencia</th>
+            <th pSortableColumn="parentesco_emergencia" style="text-align: center;">Parentesco</th>
+            <th style="text-align: center;">Acciones</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-datos>
+          <tr>
+            <td style="text-align: center;">{{ datos.id }}</td>
+            <td style="text-align: center;">{{ datos.telefono_personal }}</td>
+            <td style="text-align: center;">{{ datos.telefono_domicilio }}</td>
+            <td style="text-align: center;">{{ datos.telefono_emergencia }}</td>
+            <td style="text-align: center;">{{ datos.correo_personal }}</td>
+            <td style="text-align: center;">{{ datos.correo_institucional }}</td>
+            <td style="text-align: center;">{{ datos.nombre_persona_emergencia }}</td>
+            <td style="text-align: center;">{{ datos.parentesco_emergencia }}</td>
+           
+            <td style="text-align: center;">
+              <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning mr-2" (click)="editContactos(datos)"></button>
+              <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteContactos(datos.id)"></button>
+            </td>
+          </tr>
+        </ng-template>
+
+      </p-table>
+    </div>
+
+    <!-- Diálogo para Crear/Editar Contacto -->
+    <p-dialog [(visible)]="ContactosDialog" [style]="{width:'700px'}" header="Contacto" [modal]="true" class="p-fluid">
+      <ng-template pTemplate="content">
+        <p-tabView>
+          <!-- TAB 1: Contacto Personal -->
+          <p-tabPanel header="Contacto Personal">
+            <div class="field">
+              <label for="telefono_personal" class="font-bold">Teléfono Personal</label>
+              <input type="text" pInputText id="telefono_personal" 
+                    [(ngModel)]="contactos.telefono_personal" required
+                    [ngClass]="{'ng-invalid ng-dirty': submitted && !contactos.telefono_personal}"
+                    placeholder="Ingrese teléfono personal"  style="width: 100%;"style="font-family: 'Times New Roman', Times, serif;"/>
+              <small class="ng-invalid" *ngIf="submitted && !contactos.telefono_personal">Campo requerido</small>
+            </div>
+
+            <div class="field">
+              <label for="telefono_domicilio" class="font-bold">Teléfono Domicilio</label>
+              <input type="text" pInputText id="telefono_domicilio" 
+                    [(ngModel)]="contactos.telefono_domicilio" required
+                    [ngClass]="{'ng-invalid ng-dirty': submitted && !contactos.telefono_domicilio}"
+                    placeholder="Ingrese teléfono domicilio"  style="width: 100%;"style="font-family: 'Times New Roman', Times, serif;"/>
+              <small class="ng-invalid" *ngIf="submitted && !contactos.telefono_domicilio">Campo requerido</small>
+            </div>
+
+            <div class="field">
+              <label for="correo_personal" class="font-bold">Correo Personal</label>
+              <input type="email" pInputText id="correo_personal" 
+                    [(ngModel)]="contactos.correo_personal" required
+                    [ngClass]="{'ng-invalid ng-dirty': submitted && !contactos.correo_personal}"
+                    placeholder="Ingrese correo personal"   style="width: 100%;"style="font-family: 'Times New Roman', Times, serif;"/>
+              <small class="ng-invalid" *ngIf="submitted && !contactos.correo_personal">Campo requerido</small>
+            </div>
+
+            <div class="field">
+              <label for="correo_institucional" class="font-bold">Correo Institucional</label>
+              <input type="email" pInputText id="correo_institucional" 
+                    [(ngModel)]="contactos.correo_institucional" required
+                    [ngClass]="{'ng-invalid ng-dirty': submitted && !contactos.correo_institucional}"
+                    placeholder="Ingrese correo institucional"  style="width: 100%;" style="font-family: 'Times New Roman', Times, serif;"/>
+              <small class="ng-invalid" *ngIf="submitted && !contactos.correo_institucional">Campo requerido</small>
+            </div>
+          </p-tabPanel>
+
+          <!-- TAB 2: Contacto de Emergencia -->
+          <p-tabPanel header="Contacto Emergencia">
+            <div class="field">
+              <label for="telefono_emergencia" class="font-bold">Teléfono Emergencia</label>
+              <input type="text" pInputText id="telefono_emergencia"
+                    [(ngModel)]="contactos.telefono_emergencia" required
+                    [ngClass]="{'ng-invalid ng-dirty': submitted && !contactos.telefono_emergencia}"
+                    placeholder="Ingrese teléfono emergencia"   style="width: 100%;"style="font-family: 'Times New Roman', Times, serif;"/>
+              <small class="ng-invalid" *ngIf="submitted && !contactos.telefono_emergencia">Campo requerido</small>
+            </div>
+
+            <div class="field">
+              <label for="nombre_persona_emergencia" class="font-bold">Persona de Emergencia</label>
+              <input type="text" pInputText id="nombre_persona_emergencia" 
+                    [(ngModel)]="contactos.nombre_persona_emergencia" required
+                    [ngClass]="{'ng-invalid ng-dirty': submitted && !contactos.nombre_persona_emergencia}"
+                    placeholder="Ingrese nombre de contacto de emergencia"   style="width: 100%;"style="font-family: 'Times New Roman', Times, serif;"/>
+              <small class="ng-invalid" *ngIf="submitted && !contactos.nombre_persona_emergencia">Campo requerido</small>
+            </div>
+
+            <div class="field">
+              <label for="parentesco_emergencia" class="font-bold">Parentesco</label>
+              <input type="text" pInputText id="parentesco_emergencia" 
+                    [(ngModel)]="contactos.parentesco_emergencia" required
+                    [ngClass]="{'ng-invalid ng-dirty': submitted && !contactos.parentesco_emergencia}"
+                    placeholder="Ingrese parentesco"  style="width: 100%;"style="font-family: 'Times New Roman', Times, serif;" />
+              <small class="ng-invalid" *ngIf="submitted && !contactos.parentesco_emergencia">Campo requerido</small>
+            </div>
+          </p-tabPanel>
+
+
+        </p-tabView>
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-danger" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-success" (click)="saveOrUpdateContactos()"></button>
+      </ng-template>
+    </p-dialog>
+  </div>
+</div>
