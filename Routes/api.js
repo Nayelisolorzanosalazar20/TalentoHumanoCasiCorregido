@@ -29,7 +29,11 @@ import express from 'express';
 import multer from 'multer';
 import path from 'path';
 import { TipoCuentaController } from '../Controllers/TipoCuentaController.js';
-
+import { CargosController } from "../Controllers/CargosController.js";
+import { UnidadController } from "../Controllers/UnidadController.js";
+import { UnidadCargoController } from "../Controllers/UnidadCargoController.js";
+import { CargoAsignadoController } from "../Controllers/CargoAsignadoController.js";
+import { PeriodoController } from "../Controllers/PeridodoController.js";
 
 const ApiRouter = express.Router();
 // Configuración de almacenamiento de multer para capacitaciones
@@ -811,3 +815,44 @@ ApiRouter.post('/tipo_cuenta', TipoCuentaController.createTipoCuenta);
 ApiRouter.patch('/tipo_cuenta/:id', TipoCuentaController.updateTipoCuenta);
 ApiRouter.delete('/tipo_cuenta/:id', TipoCuentaController.deleteTipoCuenta);
 ApiRouter.get('/tipo_cuenta/:id', TipoCuentaController.getTipoCuentaById);
+
+//-----------------------------------------OTROS------------------------------------
+
+// PERIODO
+
+ApiRouter.get('/periodo', PeriodoController.getPeriodos);
+ApiRouter.post('/periodo', PeriodoController.savePeriodo);
+ApiRouter.patch('/periodo/:id', PeriodoController.updatePeriodo);
+ApiRouter.delete('/periodo/:id', PeriodoController.deletePeriodo);
+ApiRouter.get('/periodo/:id', PeriodoController.getPeriodoById);
+
+// CARGOS
+
+ApiRouter.get('/cargos', CargosController.getCargos);
+ApiRouter.post('/cargos', CargosController.saveCargos);
+ApiRouter.patch('/cargos/:id', CargosController.updateCargos);
+ApiRouter.delete('/cargos/:id', CargosController.deleteCargos);
+ApiRouter.get('/cargos/:id', CargosController.getCargosById);
+// UNIDAD CARGOS 
+
+
+ApiRouter.get('/unidad_cargos', UnidadCargoController.getUnidadCargo);
+ApiRouter.post('/unidad_cargos', UnidadCargoController.createUnidadCargo);
+ApiRouter.patch('/unidad_cargos/:id', UnidadCargoController.updateUnidadCargo);
+ApiRouter.delete('/unidad_cargos/:id', UnidadCargoController.deleteUnidadCargo);
+ApiRouter.get('/unidad_cargos/:id', UnidadCargoController.getUnidadCargoById);
+
+//Unidad
+ApiRouter.get('/unidad', UnidadController.getUnidad);
+ApiRouter.post('/unidad', UnidadController.createUnidad);
+ApiRouter.patch('/unidad/:id', UnidadController.updateUnidad);
+ApiRouter.delete('/unidad/:id', UnidadController.deleteUnidad);
+ApiRouter.get('/unidad/:id', UnidadController.getUnidadById);
+
+
+//CARGO ASIGNADO 
+ApiRouter.get('/cargo_asignado', CargoAsignadoController.getCargoAsignado);
+ApiRouter.post('/cargo_asignado', CargoAsignadoController.createCargoAsignado);
+ApiRouter.patch('/cargo_asignado/:id', CargoAsignadoController.updateCargoAsignado);
+ApiRouter.delete('/cargo_asignado/:id', CargoAsignadoController.deleteCargoAsignado);
+ApiRouter.get('/cargo_asignado/:id', CargoAsignadoController.getCargoAsignadoById);
