@@ -1,0 +1,48 @@
+<div class="grid">
+  <div class="col-12">
+    <div class="card px-10 py-10">
+
+      <p class="font-bold text-xl">UNIDAD DE CARGOS</p>
+      <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+          <div class="my-2">
+            <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-success mr-2"
+              (click)="openNew()"></button>
+          </div>
+        </ng-template>
+      </p-toolbar>
+
+      <!-- Tabla de Unidad de Cargos -->
+      <p-table #dt [value]="unidadCargoData" responsiveLayout="scroll" [rows]="10"
+        [globalFilterFields]="['id', 'cargo_id', 'unidad_id', 'encargado', 'periodo_id']" [paginator]="true"
+        [rowsPerPageOptions]="[5, 10, 20]" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" selectionMode="multiple"
+        [rowHover]="true" dataKey="id">
+
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="id" style="text-align: center;">ID</th>
+            <th pSortableColumn="cargo_id" style="text-align: center;">Cargo ID</th>
+            <th pSortableColumn="unidad_id" style="text-align: center;">Unidad ID</th>
+            <th pSortableColumn="encargado" style="text-align: center;">Encargado</th>
+            <th pSortableColumn="periodo_id" style="text-align: center;">Periodo ID</th>
+            <th style="text-align: center;">Acciones</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-datos>
+          <tr>
+            <td style="text-align: center;">{{ datos.id }}</td>
+            <td style="text-align: center;">{{ datos.cargo_id }}</td>
+            <td style="text-align: center;">{{ datos.unidad_id }}</td>
+            <td style="text-align: center;">{{ datos.encargado | date:'yyyy-MM-dd' }}</td>
+            <td style="text-align: center;">{{ datos.periodo_id }}</td>
+            <td style="text-align: center;">
+              <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning mr-2" (click)="editUnidadCargo(datos)"></button>
+              <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteUnidadCargo(datos.id)"></button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,50 @@
+<div class="grid">
+  <div class="col-12">
+    <div class="card px-10 py-10">
+
+      <p class="font-bold text-xl">CARGOS DE FUNCIONARIOS</p>
+<p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+          <div class="my-2">
+            <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-success mr-2"
+              (click)="openNew()"></button>
+          </div>
+        </ng-template>
+      </p-toolbar>
+
+
+<!-- Tabla de Cargos asignados -->
+      <p-table #dt [value]="cargosAsignadosData" responsiveLayout="scroll" [rows]="10"
+        [globalFilterFields]="['unidad_cargo', 'fecha_fin', 'fecha_inicio','estado','funcionario_id']" [paginator]="true"
+        [rowsPerPageOptions]="[5, 10, 20]" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" selectionMode="multiple"
+        [rowHover]="true" dataKey="id">
+
+        <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="id" style="text-align: center;">ID</th> 
+                    <th pSortableColumn="unidad_cargo" style="text-align: center;">Unidad Cargo</th> 
+                    <th pSortableColumn="funcionario_id" style="text-align: center;">Funcionario</th>
+                    <th pSortableColumn="fecha_inicio" style="text-align: center;">Fecha Inicio</th> 
+                    <th pSortableColumn="fecha_fin" style="text-align: center;">Fecha Fin</th> 
+                    <th pSortableColumn="estado" style="text-align: center;">Estado</th> 
+                </tr>
+
+        </ng-template>
+        <ng-template pTemplate="body" let-datos>
+            <tr>
+                <td style="text-align: center;">{{ datos.id }}</td> 
+                <td style="text-align: center;">{{ datos.unidad_cargo }}</td>
+                <td style="text-align: center;">{{ datos.funcionario_id }}</td>
+                <td style="text-align: center;">{{ datos.fecha_inicio | date:'yyyy-MM-dd' }}</td>
+                <td style="text-align: center;">{{ datos.fecha_fin | date:'yyyy-MM-dd' }}</td>
+                <td style="text-align: center;">{{ datos.estado }}</td>
+            </tr>
+        </ng-template>
+
+        
+      </p-table>
+
+    </div>
+  </div>
+</div>

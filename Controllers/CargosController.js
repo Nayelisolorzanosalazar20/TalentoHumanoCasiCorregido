@@ -10,11 +10,8 @@ export class CargosController {
       const cargos = await CargosModel.findAll({
                 order: [['id', 'ASC']],
 
-        include: {
-          model: PeriodoModel,
-          as: "Periodo",
-          attributes: ["nombre"],
-        },
+        // Correcto:
+        include: [{ model: PeriodoModel, as: 'periodo' }] 
       });
       return res.status(200).json({ cargos });
     } catch (error) {
@@ -70,7 +67,7 @@ export class CargosController {
 
   static async deleteCargos(req, res) {
     try {
-      const cargos = await CargpsModel.findByPk(req.params.id);
+      const cargos = await CargosModel.findByPk(req.params.id);
       if (!cargos) return res.status(404).json({ message: "No encontrado" });
       await cargos.destroy();
       res.json({ message: "Eliminado correctamente" });

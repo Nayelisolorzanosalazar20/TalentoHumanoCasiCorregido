@@ -23,8 +23,12 @@ import { ContactosComponent } from './components/pages/contactos/contactos.compo
 import { CapacitacionesComponent } from './components/pages/capacitaciones/capacitaciones.component';
 import { DiscapacidadComponent } from './components/pages/discapacidad/discapacidad.component';
 import { TipocuentaComponent } from './components/pages/tipocuenta/tipocuenta.component';
-
+import { CargoAsignadoComponent } from './components/pages/cargoasignado/cargoasignado.component';
+import { CargoComponent } from './components/pages/cargos/cargos.component';
 import { VisualizacionFuncionariosComponent } from './components/pages/visualizacion-funcionarios/visualizacionfuncionarios.component';
+import { PeriodoComponent } from './components/pages/periodo/periodo.component';
+import { UnidadComponent } from './components/pages/unidad/unidad.component';
+import { UnidadCargosComponent } from './components/pages/unidadcargos/unidadcargos.component';
 
 export const routes: Routes = [
 
@@ -52,9 +56,14 @@ export const routes: Routes = [
       { path: 'contactos', component: ContactosComponent },
       { path: 'capacitaciones', component: CapacitacionesComponent },
       { path: 'discapacidad', component: DiscapacidadComponent },
-      
-    { path: 'usuario', component: VisualizacionFuncionariosComponent },
+      { path: 'usuario', component: VisualizacionFuncionariosComponent },
 
+      // cargos y asignaciones
+      { path: 'cargo_asignado', component: CargoAsignadoComponent },
+      { path: 'cargos',component: CargoComponent },
+      { path: 'periodo', component: PeriodoComponent },
+      { path: 'unidad', component: UnidadComponent },
+      { path: 'unidad_cargos', component: UnidadCargosComponent }
     ]
   },
   // { path:'home', component:HomeComponent }
