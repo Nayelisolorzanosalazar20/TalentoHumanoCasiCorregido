@@ -10,6 +10,8 @@ import { TableModule } from 'primeng/table';
 import { ToolbarModule } from 'primeng/toolbar';
 import { TabViewModule } from 'primeng/tabview';
 import { DropdownModule } from 'primeng/dropdown';
+import { forkJoin } from 'rxjs';
+
 
 import { CargoAsignadoService } from '../../../layout/service/Talento Humano/cargoasignado.service';
 import { FuncionarioService } from '../../../layout/service/Talento Humano/funcionario.service';
@@ -67,6 +69,7 @@ export class CargoAsignadoComponent implements OnInit {
     this.getUnidades(); 
     
   }
+  
 
 getCargosAsignados() {
   this.cargoAsignadoService.getCargosAsignados().subscribe(data => {

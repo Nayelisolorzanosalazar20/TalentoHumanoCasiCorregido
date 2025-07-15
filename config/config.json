@@ -1,21 +1,21 @@
 {
   "development": {
     "username": "postgres",
-    "password": "12345",
+    "password": "rivaldo10",
     "database": "talento_humano-db",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
   "test": {
     "username": "postgres",
-    "password": "12345",
+    "password": "rivaldo10",
     "database": "talento_humano-db",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
   "production": {
     "username": "postgres",
-    "password": "12345",
+    "password": "rivaldo10",
     "database": "talento_humano-db",
     "host": "127.0.0.1",
     "dialect": "postgres"

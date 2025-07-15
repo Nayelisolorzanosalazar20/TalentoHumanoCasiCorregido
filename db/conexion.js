@@ -1,7 +1,7 @@
 import {Sequelize} from "sequelize";
 const  database ="talento_humano-db";
 const username = "postgres";
-const password = "12345";
+const password = "rivaldo10";
 const host = "localhost";
 const port = "5432";
 

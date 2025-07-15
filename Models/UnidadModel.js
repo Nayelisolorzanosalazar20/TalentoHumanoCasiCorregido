@@ -24,7 +24,7 @@ export const UnidadModel = sequelize.define('unidad', {
   },
   correo: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
   },
   estado: {
     type: DataTypes.STRING,

@@ -92,6 +92,11 @@ getPeriodos() {
       });
     }
   }
+  getUnidadPadreNombre(unidad_padre_id: number): string {
+  const padre = this.unidadData.find(u => u.id === unidad_padre_id);
+  return padre ? padre.nombre ?? '' : '';
+}
+
 
   deleteUnidad(id: number) {
     this.unidadService.deleteUnidad(id).subscribe({

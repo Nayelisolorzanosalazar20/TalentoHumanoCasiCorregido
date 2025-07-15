@@ -7,7 +7,7 @@ export const UnidadCargoModel = sequelize.define('unidad_cargo', {
     primaryKey: true,
   },
   
-  cargos_id: {
+  cargo_id: {
     type: DataTypes.INTEGER,
     allowNull: true,
   },
