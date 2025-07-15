@@ -37,13 +37,13 @@
             <td style="text-align: center;">{{ datos.nombre }}</td>
             <td style="text-align: center;">{{ datos.codigo }}</td>
             <td style="text-align: center;">{{ datos.correo }}</td>
-            <td style="text-align: center;">{{ datos.unidad_padre_id }}</td>
-            <td style="text-align: center;">{{ datos.periodo_id }}</td>
+            <td style="text-align: center;">{{ datos.nombre }}</td>
+            <td style="text-align: center;">{{ datos.estado }}</td>
+
             <td style="text-align: center;">
-              <span [ngClass]="{'text-green-600': datos.estado, 'text-red-600': !datos.estado}">
-                {{ datos.estado ? 'Activo' : 'Inactivo' }}
-              </span>
+              {{ getPeriodoNombre(datos.periodo_id) }}
             </td>
+            
             <td style="text-align: center;">
               <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning mr-2" (click)="editUnidad(datos)"></button>
               <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteUnidad(datos.id)"></button>
@@ -52,5 +52,73 @@
         </ng-template>
       </p-table>
     </div>
+    <!-- Dialogo de Unidades -->
+     <p-dialog [(visible)]="unidadDialog" [style]="{width:'700px'}" header="Unidad" [modal]="true" class="p-fluid">
+  <ng-template pTemplate="content">
+    <div class="field">
+      <label for="nombre" class="font-bold">Nombre:</label>
+      <input type="text" pInputText id="nombre" placeholder="Ingrese el nombre" [(ngModel)]="unidad.nombre" required
+             [ngClass]="{'ng-invalid ng-dirty': submitted && !unidad.nombre}" />
+      <small class="ng-dirty ng-invalid" *ngIf="submitted && !unidad.nombre">Nombre es requerido.</small>
+    </div>
+    <div class="field">
+      <label for="codigo" class="font-bold">Código:</label>
+      <input type="text" pInputText id="codigo" placeholder="Ingrese el código" [(ngModel)]="unidad.codigo" required
+             [ngClass]="{'ng-invalid ng-dirty': submitted && !unidad.codigo}" />
+      <small class="ng-dirty ng-invalid" *ngIf="submitted && !unidad.codigo">Código es requerido.</small>
+    </div>
+    <div class="field">
+      <label for="correo" class="font-bold">Correo:</label>
+      <input type="email" pInputText id="correo" placeholder="Ingrese el correo" [(ngModel)]="unidad.correo" required
+             [ngClass]="{'ng-invalid ng-dirty': submitted && !unidad.correo}" />
+      <small class="ng-dirty ng-invalid" *ngIf="submitted && !unidad.correo">Correo es requerido.</small>
+    </div>
+    <div class="field">
+  <label for="unidad_padre_id" class="font-bold">Unidad Padre:</label>
+  <p-dropdown
+    id="unidad_padre_id"
+    [options]="unidadData"
+    optionLabel="nombre"
+    optionValue="id"
+    placeholder="Seleccione una unidad padre"
+    [(ngModel)]="unidad.unidad_padre_id"
+    [showClear]="true">
+  </p-dropdown>
+</div>
+      
+   <div class="field">
+  <label for="periodo_id" class="font-bold">Periodo:</label>
+  <p-dropdown
+    id="periodo_id"
+    [options]="periodosData"
+    optionLabel="nombre"
+    optionValue="id"
+    placeholder="Seleccione un periodo"
+    [(ngModel)]="unidad.periodo_id"
+    [showClear]="true"
+    [ngClass]="{'ng-invalid ng-dirty': submitted && !unidad.periodo_id}">
+  </p-dropdown>
+  <small class="ng-dirty ng-invalid" *ngIf="submitted && !unidad.periodo_id">Periodo es requerido.</small>
+</div>
+   <div class="field">
+  <label for="estado" class="font-bold">Estado:</label>
+  <p-dropdown
+    id="estado"
+    [options]="[{label: 'ACTIVO', value: 'ACTIVO'}, {label: 'INACTIVO', value: 'INACTIVO'}]"
+    optionLabel="label"
+    optionValue="value"
+    placeholder="Seleccione estado"
+    [(ngModel)]="unidad.estado"
+    [ngClass]="{'ng-invalid ng-dirty': submitted && !unidad.estado}">
+  </p-dropdown>
+  <small class="ng-dirty ng-invalid" *ngIf="submitted && !unidad.estado">El estado es requerido.</small>
+</div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-danger" (click)="hideDialog()"></button>
+    <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-success" (click)="saveOrUpdateUnidad()"></button>
+  </ng-template>
+</p-dialog>
   </div>
 </div>

@@ -28,23 +28,97 @@
                     <th pSortableColumn="fecha_inicio" style="text-align: center;">Fecha Inicio</th> 
                     <th pSortableColumn="fecha_fin" style="text-align: center;">Fecha Fin</th> 
                     <th pSortableColumn="estado" style="text-align: center;">Estado</th> 
+                    <th pSortableColumn="acciones" style="text-align: center;">Acciones</th>
                 </tr>
 
         </ng-template>
         <ng-template pTemplate="body" let-datos>
             <tr>
                 <td style="text-align: center;">{{ datos.id }}</td> 
-                <td style="text-align: center;">{{ datos.unidad_cargo }}</td>
-                <td style="text-align: center;">{{ datos.funcionario_id }}</td>
+                <td style="text-align: center;">{{ getUnidadNombre(datos.unidad_cargo_id) }}</td>
+                <td style="text-align: center;">{{ getFuncionarioNombre(datos.funcionario_id) }}</td>
                 <td style="text-align: center;">{{ datos.fecha_inicio | date:'yyyy-MM-dd' }}</td>
                 <td style="text-align: center;">{{ datos.fecha_fin | date:'yyyy-MM-dd' }}</td>
                 <td style="text-align: center;">{{ datos.estado }}</td>
+                <td style="text-align: center;">
+              <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning mr-2" (click)="editCargoAsignado(datos)"></button>
+              <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteCargoAsignado(datos.id)"></button>
+            </td>
             </tr>
         </ng-template>
 
-        
       </p-table>
-
     </div>
+    <!-- Dialogo de Cargos Asignados -->
+<p-dialog [(visible)]="cargoAsignadoDialog" [style]="{width:'700px'}" header="Cargo Asignado" [modal]="true" class="p-fluid">
+  <ng-template pTemplate="content">
+    <div class="field">
+      <label for="unidad_cargo_id" class="font-bold">Unidad Cargo:</label>
+      <p-dropdown
+  id="unidad_cargo_id"
+  [options]="unidadesData"
+  optionLabel="nombre"        
+  optionValue="id"
+  placeholder="Seleccione una unidad de cargo"
+  [(ngModel)]="cargoAsignado.unidad_cargo_id"
+  [showClear]="true"
+  [ngClass]="{'ng-invalid ng-dirty': submitted && !cargoAsignado.unidad_cargo_id}">
+</p-dropdown>
+<small class="ng-dirty ng-invalid" *ngIf="submitted && !cargoAsignado.unidad_cargo_id">Unidad Cargo es requerido.</small>
+    </div>
+
+    <div class="field">
+  <label for="funcionario_id" class="font-bold">Funcionario:</label>
+  <p-dropdown
+    id="funcionario_id"
+    [options]="funcionariosData"
+    [optionLabel]="'nombres'"
+    [filterBy]="'nombres apellidos'"
+    optionValue="id"
+    placeholder="Seleccione un funcionario"
+    [(ngModel)]="cargoAsignado.funcionario_id"
+    [showClear]="true"
+    [ngClass]="{'ng-invalid ng-dirty': submitted && !cargoAsignado.funcionario_id}">
+    <ng-template let-funcionario pTemplate="item">
+      {{ funcionario.nombres }} {{ funcionario.apellidos }}
+    </ng-template>
+    <ng-template let-funcionario pTemplate="selectedItem">
+      {{ funcionario?.nombres }} {{ funcionario?.apellidos }}
+    </ng-template>
+  </p-dropdown>
+  <small class="ng-dirty ng-invalid" *ngIf="submitted && !cargoAsignado.funcionario_id">Funcionario es requerido.</small>
+</div>
+
+    <div class="field">
+      <label for="fecha_inicio" class="font-bold">Fecha Inicio:</label>
+      <input type="date" pInputText id="fecha_inicio" [(ngModel)]="cargoAsignado.fecha_inicio" required
+             [ngClass]="{'ng-invalid ng-dirty': submitted && !cargoAsignado.fecha_inicio}" />
+      <small class="ng-dirty ng-invalid" *ngIf="submitted && !cargoAsignado.fecha_inicio">Fecha inicio es requerida.</small>
+    </div>
+    <div class="field">
+      <label for="fecha_fin" class="font-bold">Fecha Fin:</label>
+      <input type="date" pInputText id="fecha_fin" [(ngModel)]="cargoAsignado.fecha_fin"
+             [ngClass]="{'ng-invalid ng-dirty': submitted && !cargoAsignado.fecha_fin}" />
+    </div>
+    <div class="field">
+  <label for="estado" class="font-bold">Estado:</label>
+  <p-dropdown
+    id="estado"
+    [options]="[{label: 'ACTIVO', value: 'ACTIVO'}, {label: 'INACTIVO', value: 'INACTIVO'}]"
+    optionLabel="label"
+    optionValue="value"
+    placeholder="Seleccione estado"
+    [(ngModel)]="cargoAsignado.estado"
+    [ngClass]="{'ng-invalid ng-dirty': submitted && !cargoAsignado.estado}">
+  </p-dropdown>
+  <small class="ng-dirty ng-invalid" *ngIf="submitted && !cargoAsignado.estado">Estado es requerido.</small>
+</div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-danger" (click)="hideDialog()"></button>
+    <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-success" (click)="saveOrUpdateCargoAsignado()"></button>
+  </ng-template>
+</p-dialog>
   </div>
 </div>

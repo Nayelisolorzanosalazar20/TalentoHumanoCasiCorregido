@@ -52,14 +52,7 @@ export class AppMenuComponent implements OnInit {
                                   {label: 'Tipo Documento', icon: 'pi pi-file', routerLink:['/tipodocumento']},
                                   {label: 'Institucion Financiera', icon: 'pi pi-money-bill', routerLink:['/institucionfinanciera']},
                                   {label: 'Agregar Funcionario', icon: 'pi pi-user-plus', routerLink:['/funcionarios']},
-                                  {label: 'Asignar Cargos a Funcionarios', icon: 'pi pi-briefcase', routerLink:['/cargo_asignado']},
-                                  {label: 'Agregar Cargos', icon: 'pi pi-briefcase', routerLink:['/cargos']},
-                                  {label: 'Periodo', icon: 'pi pi-calendar', routerLink:['/periodo']},
-                                  {label: 'Unidad', icon: 'pi pi-building', routerLink:['/unidad']},
-                                  {label: 'Unidad Cargo', icon: 'pi pi-briefcase', routerLink:['/unidad_cargos']},
-                                  
-
-    
+                           
 
                           ]
                       },
@@ -72,6 +65,19 @@ export class AppMenuComponent implements OnInit {
 
                                   // ...existing code...
                                   {label: 'Usuario', icon: 'pi pi-users', routerLink:['/usuario']},
+                          ]
+                      },
+
+
+                       {
+                          label: 'Asignacion de Cargos de Funcionarios', icon: 'pi pi-list-check',
+                          items: [
+
+                                  {label: 'Asignar Cargos', icon: 'pi pi-briefcase', routerLink:['/cargo_asignado']},
+                                  {label: 'Agregar Cargos', icon: 'pi pi-briefcase', routerLink:['/cargos']},
+                                  {label: 'Periodo', icon: 'pi pi-calendar', routerLink:['/periodo']},
+                                  {label: 'Unidad', icon: 'pi pi-building', routerLink:['/unidad']},
+                                  {label: 'Unidad Cargo', icon: 'pi pi-briefcase', routerLink:['/unidad_cargos']},
                           ]
                       },
                     ]

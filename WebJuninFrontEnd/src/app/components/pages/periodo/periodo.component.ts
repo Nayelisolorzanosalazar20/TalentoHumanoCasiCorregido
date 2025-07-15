@@ -11,7 +11,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 
 import { PeriodoService } from '../../../layout/service/Talento Humano/periodo.service';
 import { Periodo } from '../../../interface/perido.interface';
-
+import { DropdownModule } from 'primeng/dropdown';
 @Component({
   selector: 'app-periodo',
   standalone: true,
@@ -23,6 +23,8 @@ import { Periodo } from '../../../interface/perido.interface';
     ButtonModule,
     RippleModule,
     DialogModule,
+    ToolbarModule,
+    DropdownModule,
     InputNumberModule
   ],
   templateUrl: './periodo.component.html',

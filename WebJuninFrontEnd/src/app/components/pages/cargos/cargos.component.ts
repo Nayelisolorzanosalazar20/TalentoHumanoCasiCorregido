@@ -11,7 +11,9 @@ import { ToolbarModule } from 'primeng/toolbar';
 
 import { CargoService } from '../../../layout/service/Talento Humano/cargos.service';
 import { Cargo } from '../../../interface/cargos.interface';
-
+import { DropdownModule } from 'primeng/dropdown';
+import { PeriodoService } from '../../../layout/service/Talento Humano/periodo.service';
+import { Periodo } from '../../../interface/perido.interface';
 @Component({
   selector: 'app-cargo',
   standalone: true,
@@ -23,6 +25,7 @@ import { Cargo } from '../../../interface/cargos.interface';
     ButtonModule,
     RippleModule,
     DialogModule,
+    DropdownModule,
     InputNumberModule
   ],
   templateUrl: './cargos.component.html',
@@ -36,26 +39,34 @@ export class CargoComponent implements OnInit {
 
   cargo: Cargo = {};
   cargosData: Cargo[] = [];
-
+  periodosData: Periodo[] = [];
   submitted: boolean = false;
   rowsPerPageOptions: number[] = [5, 10, 20];
 
   constructor(
     private cargoService: CargoService,
+    private periodoService: PeriodoService,
     private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
     this.getCargos();
+    this.getPeriodos();
   }
 
   getCargos() {
-    this.cargoService.getCargos().subscribe(data => {
-      // Si tu backend responde { cargos: [...] }
-      const cargos = data.cargos || [];
-      this.cargosData = cargos;
-    });
-  }
+  this.cargoService.getCargos().subscribe(data => {
+    const cargos = data.cargos || [];
+    this.cargosData = cargos;
+    console.log('Cargos cargados:', this.cargosData); // <-- Agrega esto
+  });
+}
+  getPeriodos() {
+  this.periodoService.getPeriodos().subscribe(data => {
+    this.periodosData = Array.isArray(data) ? data : (data.periodos || []);
+    console.log('Periodos cargados:', this.periodosData);
+  });
+}
 
   saveOrUpdateCargo() {
     if (this.cargo.id) {
@@ -111,4 +122,10 @@ export class CargoComponent implements OnInit {
       console.error('ID no disponible para el cargo seleccionado');
     }
   }
+
+     // Método para obtener el nombre del periodo por su ID
+getPeriodoNombre(periodo_id: number): string {
+  const periodo = this.periodosData.find(p => p.id === periodo_id);
+  return periodo ? (periodo.nombre ?? '') : '';
+}
 }

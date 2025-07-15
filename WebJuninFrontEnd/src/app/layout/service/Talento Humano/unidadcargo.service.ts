@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
 import { UnidadCargo } from '../../../interface/unidadcargo.interface';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -25,6 +26,7 @@ export class UnidadCargoService {
     );
   }
    
+  
 
   getUnidadCargoById(id: number): Observable<UnidadCargo> {
     return this.http.get<UnidadCargo>(`${this.Url}/unidad_cargos/${id}`).pipe(
@@ -47,6 +49,19 @@ export class UnidadCargoService {
   deleteUnidadCargo(id: number): Observable<UnidadCargo> {
     return this.http.delete<UnidadCargo>(`${this.Url}/unidad_cargos/${id}`).pipe(
       catchError(this.handleError)
+    );
+  }
+}
+export class PeriodoService {
+  private Url: string = environment.baseUrl;
+  constructor(private http: HttpClient) {}
+
+  getPeriodos(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.Url}/periodo`).pipe(
+      catchError(error => {
+        console.error('Error al obtener periodo:', error);
+        return throwError(() => new Error('No se pudo obtener periodo'));
+      })
     );
   }
 }

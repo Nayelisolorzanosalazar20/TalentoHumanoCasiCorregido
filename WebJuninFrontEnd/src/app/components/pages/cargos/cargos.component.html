@@ -1,23 +1,23 @@
+<!-- CARGOS -->
 <div class="grid">
   <div class="col-12">
-    <div class="card px-10 py-10">
+    <div class="card px-6 py-6">
 
       <p class="font-bold text-xl">CARGOS</p>
+
+      <!-- Toolbar con botón Nuevo -->
       <p-toolbar styleClass="mb-4">
         <ng-template pTemplate="left">
           <div class="my-2">
-            <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-success mr-2"
-              (click)="openNew()"></button>
+            <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
           </div>
         </ng-template>
       </p-toolbar>
 
       <!-- Tabla de Cargos -->
-      <p-table #dt [value]="cargosData" responsiveLayout="scroll" [rows]="10"
-        [globalFilterFields]="['id', 'nombre', 'sueldo', 'periodo_id', 'grupo_ocupacional']" [paginator]="true"
-        [rowsPerPageOptions]="[5, 10, 20]" [showCurrentPageReport]="true"
-        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" selectionMode="multiple"
-        [rowHover]="true" dataKey="id">
+      <p-table #dt [value]="cargosData" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id', 'nombre', 'sueldo', 'periodo_id', 'grupo_ocasional']" [paginator]="true"
+               [rowsPerPageOptions]="[5, 10, 20]" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+               selectionMode="multiple" [rowHover]="true" dataKey="id">
 
         <ng-template pTemplate="header">
           <tr>
@@ -29,20 +29,82 @@
             <th style="text-align: center;">Acciones</th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-datos>
+
+        <ng-template pTemplate="body" let-cargo>
           <tr>
-            <td style="text-align: center;">{{ datos.id }}</td>
-            <td style="text-align: center;">{{ datos.nombre }}</td>
-            <td style="text-align: center;">{{ datos.sueldo }}</td>
-            <td style="text-align: center;">{{ datos.periodo_id }}</td>
-            <td style="text-align: center;">{{ datos.grupo_ocupacional }}</td>
             <td style="text-align: center;">
-              <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning mr-2" (click)="editCargo(datos)"></button>
-              <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteCargo(datos.id)"></button>
+              <span class="p-column-title">ID</span>
+              {{ cargo.id }}
+            </td>
+            <td style="text-align: center;">
+              <span class="p-column-title">Nombre</span>
+              {{ cargo.nombre }}
+            </td>
+            <td style="text-align: center;">
+              <span class="p-column-title">Sueldo</span>
+              {{ cargo.sueldo }}
+            </td>
+              <td style="text-align: center;">
+                <span class="p-column-title">Periodo</span>
+              {{ getPeriodoNombre(cargo.periodo_id) }}
+            </td>
+            <td style="text-align: center;">
+              <span class="p-column-title">Grupo Ocupacional</span>
+              {{ cargo.grupo_ocupacional }}
+            </td>
+            <td class="action-buttons-cell" style="text-align: center;">
+              <!-- ...código existente... -->
+<button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning mr-2" (click)="editCargo(cargo)"></button>
+<button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteCargo(cargo.id)"></button>
+<!-- ...código existente... -->
             </td>
           </tr>
         </ng-template>
+
       </p-table>
+
     </div>
+
+    <!-- Dialogo de Cargos -->
+    <p-dialog [(visible)]="cargoDialog" [style]="{width:'700px'}" header="Cargo" [modal]="true" class="p-fluid">
+      <ng-template pTemplate="content">
+        <div class="field">
+          <label for="nombre" class="font-bold">Nombre:</label>
+          <input type="text" pInputText id="nombre" placeholder="Ingrese el nombre del cargo" [(ngModel)]="cargo.nombre" required autofocus
+                 [ngClass]="{'ng-invalid ng-dirty' : submitted && !cargo.nombre}" style="font-family: 'Times New Roman', Times, serif;" />
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !cargo.nombre">El nombre es un campo requerido.</small>
+        </div>
+        <div class="field">
+          <label for="sueldo" class="font-bold">Sueldo:</label>
+          <input type="number" pInputText id="sueldo" placeholder="Ingrese el sueldo" [(ngModel)]="cargo.sueldo" required
+                 [ngClass]="{'ng-invalid ng-dirty' : submitted && !cargo.sueldo}" style="font-family: 'Times New Roman', Times, serif;" />
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !cargo.sueldo">El sueldo es un campo requerido.</small>
+        </div>
+        <div class="field">
+  <label for="periodo_id" class="font-bold">Periodo:</label>
+  <p-dropdown
+    id="periodo_id"
+    [options]="periodosData"
+    optionLabel="nombre"
+    optionValue="id"
+    placeholder="Seleccione un periodo"
+    [(ngModel)]="cargo.periodo_id"
+    [showClear]="true"
+    [ngClass]="{'ng-invalid ng-dirty': submitted && !cargo.periodo_id}">
+  </p-dropdown>
+  <small class="ng-dirty ng-invalid" *ngIf="submitted && !cargo.periodo_id">Periodo es requerido.</small>
+</div>
+        <div class="field">
+          <label for="grupo_ocupacional" class="font-bold">Grupo Ocupacional:</label>
+          <input type="text" pInputText id="grupo_ocupacional" placeholder="Ingrese el grupo ocupacional" [(ngModel)]="cargo.grupo_ocupacional"
+                 style="font-family: 'Times New Roman', Times, serif;" />
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-danger" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-success" (click)="saveOrUpdateCargo()"></button>
+      </ng-template>
+    </p-dialog>
   </div>
 </div>

@@ -18,7 +18,8 @@ import { FuncionarioService } from '../../../layout/service/Talento Humano/funci
 import { CargoAsignado } from '../../../interface/cargoasignado.interface';
 import { Funcionario } from '../../../interface/funcionario.interface';
 import { Observable } from 'rxjs';
-
+import { Unidad } from '../../../interface/unidad.interface';
+import { UnidadService } from '../../../layout/service/Talento Humano/unidad.service';
 
 @Component({
   selector: 'app-cargo-asignado',
@@ -46,9 +47,9 @@ export class CargoAsignadoComponent implements OnInit {
 
   cargoAsignado: CargoAsignado = {};
   cargosAsignadosData: CargoAsignado[] = [];
-
-  funcionariosData: Funcionario[] = [];
-  
+  funcionarios : Funcionario = {};
+  funcionariosData: any[] = [];
+  unidadesData: any[] = [];
 
   submitted: boolean = false;
   rowsPerPageOptions: number[] = [5, 10, 20];
@@ -57,12 +58,13 @@ export class CargoAsignadoComponent implements OnInit {
     private cargoAsignadoService: CargoAsignadoService,
     private messageService: MessageService,
     private funcionarioService: FuncionarioService,
-   // private unidadCargoService: UnidadCargoService
+    private unidadService: UnidadService, 
   ) {}
 
   ngOnInit(): void {
-    this.getCargosAsignados();
     this.getFuncionarios();
+    this.getCargosAsignados();
+    this.getUnidades(); 
     
   }
 
@@ -78,15 +80,17 @@ getCargosAsignados() {
   });
 }
   
+getUnidades() {
+  this.unidadService.getUnidades().subscribe((data: any) => {
+    this.unidadesData = Array.isArray(data) ? data : (data.unidades || []);
+  });
+}
 
-  getFuncionarios() {
-    this.funcionarioService.getFuncionarios().subscribe(data => {
-      this.funcionariosData = data.map(f => ({
-        ...f,
-        nombreCompleto: `${f.nombres} ${f.apellidos}`
-      }));
-    });
-  }
+getFuncionarios() {
+  this.funcionarioService.getFuncionarios().subscribe((data: any) => {
+    this.funcionariosData = Array.isArray(data) ? data : (data.funcionarios || []);
+  });
+}
 
  
 
@@ -153,5 +157,16 @@ getCargosAsignados() {
     }
 
 }
-
+getFuncionarioNombre(funcionario_id: number): string {
+  const funcionario = this.funcionariosData.find(f => f.id == funcionario_id);
+  if (funcionario) {
+    // Usa los campos correctos según tu JSON
+    return `${funcionario.nombres ?? ''} ${funcionario.apellidos ?? ''}`.trim();
+  }
+  return funcionario_id ? funcionario_id.toString() : '';
+}
+getUnidadNombre(unidad_cargo_id: number): string {
+  const unidad = this.unidadesData.find(u => u.id == unidad_cargo_id);
+  return unidad ? unidad.nombre : unidad_cargo_id?.toString() ?? '';
+}
 }

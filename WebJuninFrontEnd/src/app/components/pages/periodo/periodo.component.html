@@ -35,11 +35,8 @@
             <td style="text-align: center;">{{ datos.nombre }}</td>
             <td style="text-align: center;">{{ datos.fecha_inicio | date:'yyyy-MM-dd' }}</td>
             <td style="text-align: center;">{{ datos.fecha_fin | date:'yyyy-MM-dd' }}</td>
-            <td style="text-align: center;">
-              <span [ngClass]="{'text-green-600': datos.estado, 'text-red-600': !datos.estado}">
-                {{ datos.estado ? 'Activo' : 'Inactivo' }}
-              </span>
-            </td>
+             <td style="text-align: center;">{{ datos.estado }}</td>
+            
             <td style="text-align: center;">
               <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning mr-2" (click)="editPeriodo(datos)"></button>
               <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deletePeriodo(datos.id)"></button>
@@ -48,5 +45,46 @@
         </ng-template>
       </p-table>
     </div>
+    <!-- Dialogo de Periodos -->
+     <p-dialog [(visible)]="periodoDialog" [style]="{width:'700px'}" header="Periodo" [modal]="true" class="p-fluid">
+      <ng-template pTemplate="content">
+        <div class="field">
+          <label for="nombre" class="font-bold">Nombre: </label>
+          <input type="text" pInputText id="nombre" placeholder="Ingrese el nombre" [(ngModel)]="periodo.nombre" required autofocus
+                 [ngClass]="{'ng-invalid ng-dirty' : submitted && !periodo.nombre}" style="font-family: 'Times New Roman', Times, serif;"/>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !periodo.nombre">Nombre es un campo requerido.</small>
+        </div>
+        <div class="field">
+          <label for="fecha_inicio" class="font-bold">Fecha Inicio: </label>
+          <input type="date" pInputText id="fecha_inicio" [(ngModel)]="periodo.fecha_inicio" required
+                 [ngClass]="{'ng-invalid ng-dirty' : submitted && !periodo.fecha_inicio}" />
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !periodo.fecha_inicio">Fecha inicio es requerida.</small>
+        </div>
+        <div class="field">
+          <label for="fecha_fin" class="font-bold">Fecha Fin: </label>
+          <input type="date" pInputText id="fecha_fin" [(ngModel)]="periodo.fecha_fin" required
+                 [ngClass]="{'ng-invalid ng-dirty' : submitted && !periodo.fecha_fin}" />
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !periodo.fecha_fin">Fecha fin es requerida.</small>
+        </div>
+       <div class="field">
+  <label for="estado" class="font-bold">Estado:</label>
+  <p-dropdown
+    id="estado"
+    [options]="[{label: 'ACTIVO', value: 'ACTIVO'}, {label: 'INACTIVO', value: 'INACTIVO'}]"
+    optionLabel="label"
+    optionValue="value"
+    placeholder="Seleccione estado"
+    [(ngModel)]="periodo.estado"
+    [ngClass]="{'ng-invalid ng-dirty': submitted && !periodo.estado}">
+  </p-dropdown>
+  <small class="ng-dirty ng-invalid" *ngIf="submitted && !periodo.estado">El periodo es requerido.</small>
+</div>
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-danger" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-success" (click)="saveOrUpdatePeriodo()"></button>
+      </ng-template>
+    </p-dialog>
   </div>
 </div>
