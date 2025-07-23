@@ -8,21 +8,38 @@
           <div class="my-2">
             <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-success mr-2"
               (click)="openNew()"></button>
-          </div>
-        </ng-template>
-      </p-toolbar>
+           </div>
+  </ng-template>
+  <ng-template pTemplate="right">
+    <span class="p-input-icon-left">
+      <i class="pi pi-search"></i>
+      <input
+        pInputText
+        type="text"
+        placeholder="Busqueda..."
+        #globalFilterInput
+        (input)="dt.filterGlobal(globalFilterInput.value, 'contains')"
+        style="width: 250px; margin-left: 0.5rem"
+      />
+    </span>
+  </ng-template>
+</p-toolbar>
+
 
       <!-- Tabla de Unidad de Cargos -->
-      <p-table #dt [value]="unidadCargoData" responsiveLayout="scroll" [rows]="10"
-        [globalFilterFields]="['id', 'cargo_id', 'unidad_id', 'encargado', 'periodo_id']" [paginator]="true"
-        [rowsPerPageOptions]="[5, 10, 20]" [showCurrentPageReport]="true"
+      <p-table #dt [value]="unidadCargoData"
+       responsiveLayout="scroll" [rows]="10"
+        [globalFilterFields]="['unidad_nombre', 'cargo_nombre']"
+        [paginator]="true"
+        [rowsPerPageOptions]="[5, 10, 20]"
+        [showCurrentPageReport]="true"
         currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" selectionMode="multiple"
         [rowHover]="true" dataKey="id">
 
     
         <ng-template pTemplate="header">
           <tr>
-            <th pSortableColumn="id" style="text-align: center;">ID</th>
+             <!-- <th pSortableColumn="id" style="text-align: center;">ID</th>-->
             <th pSortableColumn="cargo_id" style="text-align: center;">Cargo</th>
             <th pSortableColumn="unidad_id" style="text-align: center;">Unidad</th>
             <th pSortableColumn="encargado" style="text-align: center;">Fecha Encargado</th>
@@ -32,7 +49,7 @@
         </ng-template>
         <ng-template pTemplate="body" let-datos>
           <tr>
-            <td style="text-align: center;">{{ datos.id }}</td>
+            <!--  <td style="text-align: center;">{{ datos.id }}</td>-->
             <td style="text-align: center;">{{ getCargoNombre(datos.cargo_id) }}</td>
             <td style="text-align: center;">{{ getUnidadNombre(datos.unidad_id) }}</td>
             <td style="text-align: center;">{{ datos.encargado | date:'yyyy-MM-dd' }}</td>

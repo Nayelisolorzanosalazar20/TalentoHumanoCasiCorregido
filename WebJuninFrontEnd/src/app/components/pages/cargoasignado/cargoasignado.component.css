@@ -7,6 +7,13 @@
 :host ::ng-deep .p-button {
   font-size: 0.9rem;
 }
+::ng-deep .p-input-icon-left .pi {
+  margin-left: 0.5rem; /* Aumenta la separación entre la lupa y el borde */
+}
+
+::ng-deep .p-input-icon-left > input {
+  padding-left: 2rem !important; /* Da espacio al texto para no montarse con la lupa */
+}
 
 :host ::ng-deep .p-button-success {
   background-color: #388e3c;

@@ -14,6 +14,7 @@ import { Cargo } from '../../../interface/cargos.interface';
 import { DropdownModule } from 'primeng/dropdown';
 import { PeriodoService } from '../../../layout/service/Talento Humano/periodo.service';
 import { Periodo } from '../../../interface/perido.interface';
+
 @Component({
   selector: 'app-cargo',
   standalone: true,
@@ -26,14 +27,13 @@ import { Periodo } from '../../../interface/perido.interface';
     RippleModule,
     DialogModule,
     DropdownModule,
-    InputNumberModule
+    InputNumberModule,
   ],
   templateUrl: './cargos.component.html',
   styleUrls: ['./cargos.component.css'],
   providers: [MessageService],
 })
 export class CargoComponent implements OnInit {
-
   cargoDialog: boolean = false;
   deleteCargoDialog: boolean = false;
 
@@ -55,18 +55,19 @@ export class CargoComponent implements OnInit {
   }
 
   getCargos() {
-  this.cargoService.getCargos().subscribe(data => {
-    const cargos = data.cargos || [];
-    this.cargosData = cargos;
-    console.log('Cargos cargados:', this.cargosData); // <-- Agrega esto
-  });
-}
+    this.cargoService.getCargos().subscribe((data) => {
+      const cargos = data.cargos || [];
+      this.cargosData = cargos;
+      console.log('Cargos cargados:', this.cargosData);
+    });
+  }
+
   getPeriodos() {
-  this.periodoService.getPeriodos().subscribe(data => {
-    this.periodosData = Array.isArray(data) ? data : (data.periodos || []);
-    console.log('Periodos cargados:', this.periodosData);
-  });
-}
+    this.periodoService.getPeriodos().subscribe((data) => {
+      this.periodosData = Array.isArray(data) ? data : data.periodos || [];
+      console.log('Periodos cargados:', this.periodosData);
+    });
+  }
 
   saveOrUpdateCargo() {
     if (this.cargo.id) {
@@ -77,7 +78,7 @@ export class CargoComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error al actualizar cargo:', error);
-        }
+        },
       });
     } else {
       this.cargoService.saveCargo(this.cargo).subscribe({
@@ -87,7 +88,7 @@ export class CargoComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error al guardar cargo:', error);
-        }
+        },
       });
     }
   }
@@ -99,7 +100,7 @@ export class CargoComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error al eliminar cargo:', err);
-      }
+      },
     });
   }
 
@@ -123,9 +124,9 @@ export class CargoComponent implements OnInit {
     }
   }
 
-     // Método para obtener el nombre del periodo por su ID
-getPeriodoNombre(periodo_id: number): string {
-  const periodo = this.periodosData.find(p => p.id === periodo_id);
-  return periodo ? (periodo.nombre ?? '') : '';
-}
+  // Método para obtener el nombre del periodo por su ID
+  getPeriodoNombre(periodo_id: number): string {
+    const periodo = this.periodosData.find((p) => p.id === periodo_id);
+    return periodo ? periodo.nombre ?? '' : '';
+  }
 }

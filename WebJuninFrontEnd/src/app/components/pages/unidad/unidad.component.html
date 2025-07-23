@@ -8,20 +8,37 @@
           <div class="my-2">
             <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-success mr-2"
               (click)="openNew()"></button>
-          </div>
-        </ng-template>
-      </p-toolbar>
+           </div>
+  </ng-template>
+  <ng-template pTemplate="right">
+    <span class="p-input-icon-left">
+      <i class="pi pi-search"></i>
+      <input
+        pInputText
+        type="text"
+        placeholder="Busqueda..."
+        #globalFilterInput
+        (input)="dt.filterGlobal(globalFilterInput.value, 'contains')"
+        style="width: 250px; margin-left: 0.5rem"
+      />
+    </span>
+  </ng-template>
+</p-toolbar>
+
 
       <!-- Tabla de Unidades -->
-      <p-table #dt [value]="unidadData" responsiveLayout="scroll" [rows]="10"
-        [globalFilterFields]="['id', 'nombre', 'codigo', 'correo', 'estado', 'unidad_padre_id', 'periodo_id']" [paginator]="true"
-        [rowsPerPageOptions]="[5, 10, 20]" [showCurrentPageReport]="true"
+      <p-table #dt [value]="unidadData" 
+      responsiveLayout="scroll" [rows]="10"
+        [globalFilterFields]="['nombre','codigo','Unidad Padre','estado']" 
+        [paginator]="true"
+        [rowsPerPageOptions]="[5, 10, 20]" 
+        [showCurrentPageReport]="true"
         currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" selectionMode="multiple"
         [rowHover]="true" dataKey="id">
 
         <ng-template pTemplate="header">
           <tr>
-            <th pSortableColumn="id" style="text-align: center;">ID</th>
+            <!--  <th pSortableColumn="id" style="text-align: center;">ID</th>-->
             <th pSortableColumn="nombre" style="text-align: center;">Nombre</th>
             <th pSortableColumn="codigo" style="text-align: center;">Código</th>
             <th pSortableColumn="correo" style="text-align: center;">Correo</th>
@@ -35,7 +52,7 @@
         </ng-template>
         <ng-template pTemplate="body" let-datos>
           <tr>
-            <td style="text-align: center;">{{ datos.id }}</td>
+             <!-- <td style="text-align: center;">{{ datos.id }}</td>-->
             <td style="text-align: center;">{{ datos.nombre }}</td>
             <td style="text-align: center;">{{ datos.codigo }}</td>
             <td style="text-align: center;">{{ datos.correo }}</td>

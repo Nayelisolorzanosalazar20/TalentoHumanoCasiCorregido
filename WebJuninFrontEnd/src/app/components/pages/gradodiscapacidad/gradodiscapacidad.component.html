@@ -20,7 +20,7 @@
 
         <ng-template pTemplate="header">
           <tr>
-            <th pSortableColumn="Id" style="text-align: center;">ID</th>
+             <!-- <th pSortableColumn="Id" style="text-align: center;">ID</th>-->
             <th pSortableColumn="Grado" style="text-align: center;">Grado de discapacidad</th>
             <th pSortableColumn="Acciones" style="text-align: center;">Acciones</th>
           </tr>
@@ -28,11 +28,11 @@
 
         <ng-template pTemplate="body" let-datos>
           <tr>
-            <td style="width:14%; min-width:30rem; text-align: center;">
+            <!--  <td style="width:14%; min-width:30rem; text-align: center;">
               <span class="p-column-title">Id</span>
               {{ datos.id }}
-            </td>
-            <td style="width:14%; min-width:10rem; text-align: center;">
+            </td>-->
+            <td style=" text-align: center;">
               <span class="p-column-title">Grado</span>
               {{ datos.grado }}
             </td>

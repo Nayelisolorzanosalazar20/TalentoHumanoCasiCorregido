@@ -12,6 +12,14 @@
   background-color: #388e3c;
   border: none;
 }
+::ng-deep .p-input-icon-left .pi {
+  margin-left: 0.5rem; /* Aumenta la separación entre la lupa y el borde */
+}
+
+::ng-deep .p-input-icon-left > input {
+  padding-left: 2rem !important; /* Da espacio al texto para no montarse con la lupa */
+}
+
 
 :host ::ng-deep .p-button-danger {
   background-color: #d32f2f;

@@ -61,20 +61,40 @@ export class UnidadCargosComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getUnidadCargo();
-    this.getPeriodos();
-    this.getUnidades();
-    this.getCargos();
+  this.getPeriodos();
 
-  }
+  // Cargar unidades y cargos antes de los datos principales
+  this.unidadService.getUnidades().subscribe(data => {
+    this.unidadesData = Array.isArray(data) ? data : (data.unidades || []);
+
+    this.cargoService.getCargos().subscribe(cargos => {
+      this.cargosData = Array.isArray(cargos) ? cargos : (cargos.cargos || []);
+      
+      this.getUnidadCargo(); // Solo se llama cuando ambos están listos
+    });
+  });
+}
+
 
   getUnidadCargo() {
+  this.unidadcargosService.getUnidadesCargo().subscribe(data => {
+    const unidadesCargos = Array.isArray(data) ? data : (data.unidad_cargo || []);
+    
+    this.unidadCargoData = unidadesCargos.map(u => {
+      const unidad = this.unidadesData.find(un => un.id === u.unidad_id);
+      const cargo = this.cargosData.find(ca => ca.id === u.cargo_id);
 
-   this.unidadcargosService.getUnidadesCargo().subscribe(data => {
-    this.unidadCargoData = Array.isArray(data) ? data : (data.unidad_cargo || []);
+      return {
+        ...u,
+        unidad_nombre: unidad ? unidad.nombre : '',
+        cargo_nombre: cargo ? cargo.nombre : ''
+      };
+    });
+
     console.log('UnidadCargoData:', this.unidadCargoData);
   });
-  }
+}
+
 getPeriodos() {
   this.periodoService.getPeriodos().subscribe(data => {
     this.periodosData = Array.isArray(data) ? data : (data.periodos || []);

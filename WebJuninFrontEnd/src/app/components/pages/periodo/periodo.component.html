@@ -21,7 +21,7 @@
 
         <ng-template pTemplate="header">
           <tr>
-            <th pSortableColumn="id" style="text-align: center;">ID</th>
+             <!-- <th pSortableColumn="id" style="text-align: center;">ID</th>-->
             <th pSortableColumn="nombre" style="text-align: center;">Nombre</th>
             <th pSortableColumn="fecha_inicio" style="text-align: center;">Fecha Inicio</th>
             <th pSortableColumn="fecha_fin" style="text-align: center;">Fecha Fin</th>
@@ -31,7 +31,7 @@
         </ng-template>
         <ng-template pTemplate="body" let-datos>
           <tr>
-            <td style="text-align: center;">{{ datos.id }}</td>
+             <!-- <td style="text-align: center;">{{ datos.id }}</td>-->
             <td style="text-align: center;">{{ datos.nombre }}</td>
             <td style="text-align: center;">{{ datos.fecha_inicio | date:'yyyy-MM-dd' }}</td>
             <td style="text-align: center;">{{ datos.fecha_fin | date:'yyyy-MM-dd' }}</td>

@@ -9,21 +9,39 @@
             <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-success mr-2"
               (click)="openNew()"></button>
           </div>
-        </ng-template>
-      </p-toolbar>
+  </ng-template>
+  <ng-template pTemplate="right">
+    <span class="p-input-icon-left">
+      <i class="pi pi-search"></i>
+      <input
+        pInputText
+        type="text"
+        placeholder="Busqueda..."
+        #globalFilterInput
+        (input)="dt.filterGlobal(globalFilterInput.value, 'contains')"
+        style="width: 250px; margin-left: 0.5rem"
+      />
+    </span>
+  </ng-template>
+</p-toolbar>
+
 
 
 <!-- Tabla de Cargos asignados -->
-      <p-table #dt [value]="cargosAsignadosData" responsiveLayout="scroll" [rows]="10"
-        [globalFilterFields]="['unidad_cargo', 'fecha_fin', 'fecha_inicio','estado','funcionario_id']" [paginator]="true"
-        [rowsPerPageOptions]="[5, 10, 20]" [showCurrentPageReport]="true"
-        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" selectionMode="multiple"
+      <p-table #dt [value]="cargosAsignadosData" 
+      responsiveLayout="scroll" [rows]="10"
+[globalFilterFields]="['unidad_cargo_nombre']"
+        [paginator]="true"
+        [rowsPerPageOptions]="[5, 10, 20]"
+         [showCurrentPageReport]="true"
+        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" 
+        selectionMode="multiple"
         [rowHover]="true" dataKey="id">
 
         <ng-template pTemplate="header">
                 <tr>
-                    <th pSortableColumn="id" style="text-align: center;">ID</th> 
-                    <th pSortableColumn="unidad_cargo" style="text-align: center;">Unidad Cargo</th> 
+                    <!--  <th pSortableColumn="id" style="text-align: center;">ID</th> -->
+                    <th pSortableColumn="unidad_cargo" style="text-align: center;">Unidad y Cargo</th> 
                     <th pSortableColumn="funcionario_id" style="text-align: center;">Funcionario</th>
                     <th pSortableColumn="fecha_inicio" style="text-align: center;">Fecha Inicio</th> 
                     <th pSortableColumn="fecha_fin" style="text-align: center;">Fecha Fin</th> 
@@ -34,11 +52,9 @@
         </ng-template>
         <ng-template pTemplate="body" let-datos>
             <tr>
-                <td style="text-align: center;">{{ datos.id }}</td> 
-                <td style="text-align: center;">{{ getUnidadNombre(datos.unidad_cargo_id) }}</td>
+                <!--  <td style="text-align: center;">{{ datos.id }}</td> -->
+                <td class="text-center">{{ datos.unidad_cargo_nombre }}</td>
                 <td style="text-align: center;">{{ getFuncionarioNombre(datos.funcionario_id) }}</td>
-<!-- ...existing code... -->
-<!-- ...existing code... -->
                 <td style="text-align: center;">{{ datos.fecha_inicio | date:'yyyy-MM-dd' }}</td>
                 <td style="text-align: center;">{{ datos.fecha_fin | date:'yyyy-MM-dd' }}</td>
                 <td style="text-align: center;">{{ datos.estado }}</td>
@@ -55,12 +71,12 @@
 <p-dialog [(visible)]="cargoAsignadoDialog" [style]="{width:'700px'}" header="Cargo Asignado" [modal]="true" class="p-fluid">
   <ng-template pTemplate="content">
     <div class="field">
-      <label for="unidad_cargo_id" class="font-bold">Unidad Cargo:</label>
+      <label for="unidad_cargo_id" class="font-bold">Unidad y Cargo:</label>
       <p-dropdown
   id="unidad_cargo_id"
-  [options]="unidadesData"
-  optionLabel="nombre"        
-  optionValue="id"
+  [options]="unidadCargosData"
+  optionLabel="label"
+  optionValue="value"
   placeholder="Seleccione una unidad de cargo"
   [(ngModel)]="cargoAsignado.unidad_cargo_id"
   [showClear]="true"

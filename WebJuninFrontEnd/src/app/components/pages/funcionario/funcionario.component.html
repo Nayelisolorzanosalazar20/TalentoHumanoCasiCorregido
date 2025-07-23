@@ -23,7 +23,7 @@
     type="text"
     [(ngModel)]="textoBusqueda"
     (input)="filtrarFuncionarios($event, dt)"
-    placeholder="Buscar id,nombres,apellidos..."
+    placeholder="Buscar Nombres,Apellidos..."
     style="width: 100%; padding-left: 2.5em;  padding-right: 1.5em; border: 1px solid #00f72d; border-radius: 8px;"
     autocomplete="off"
   />
@@ -47,7 +47,7 @@
 
         <ng-template pTemplate="header">
           <tr>
-            <th pSortableColumn="id" style="text-align: center;">ID</th> 
+            <!--  <th pSortableColumn="id" style="text-align: center;">ID</th> -->
             <th pSortableColumn="DNI" style="text-align: center;">Cédula</th>
             <th pSortableColumn="nombres" style="text-align: center;">Nombres</th>
             <th pSortableColumn="apellidos" style="text-align: center;">Apellidos</th>
@@ -80,7 +80,7 @@
 
         <ng-template pTemplate="body" let-datos>
           <tr>
-            <td style="text-align: center;">{{ datos.id }}</td> 
+             <!-- <td style="text-align: center;">{{ datos.id }}</td> -->
             <td style="text-align: center;">{{ datos.DNI }}</td>
             <td style="text-align: center;">{{ datos.nombres }}</td>
             <td style="text-align: center;">{{ datos.apellidos }}</td>

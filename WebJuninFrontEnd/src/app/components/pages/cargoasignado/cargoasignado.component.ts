@@ -12,16 +12,14 @@ import { TabViewModule } from 'primeng/tabview';
 import { DropdownModule } from 'primeng/dropdown';
 import { forkJoin } from 'rxjs';
 
-
 import { CargoAsignadoService } from '../../../layout/service/Talento Humano/cargoasignado.service';
 import { FuncionarioService } from '../../../layout/service/Talento Humano/funcionario.service';
-
+import { UnidadService } from '../../../layout/service/Talento Humano/unidad.service';
+import { UnidadCargoService } from '../../../layout/service/Talento Humano/unidadcargo.service';
+import { CargoService } from '../../../layout/service/Talento Humano/cargos.service';
 
 import { CargoAsignado } from '../../../interface/cargoasignado.interface';
 import { Funcionario } from '../../../interface/funcionario.interface';
-import { Observable } from 'rxjs';
-import { Unidad } from '../../../interface/unidad.interface';
-import { UnidadService } from '../../../layout/service/Talento Humano/unidad.service';
 
 @Component({
   selector: 'app-cargo-asignado',
@@ -39,7 +37,7 @@ import { UnidadService } from '../../../layout/service/Talento Humano/unidad.ser
     DropdownModule
   ],
   templateUrl: './cargoasignado.component.html',
-  styleUrl: './cargoasignado.component.css',
+  styleUrls: ['./cargoasignado.component.css'],
   providers: [MessageService],
 })
 export class CargoAsignadoComponent implements OnInit {
@@ -49,9 +47,11 @@ export class CargoAsignadoComponent implements OnInit {
 
   cargoAsignado: CargoAsignado = {};
   cargosAsignadosData: CargoAsignado[] = [];
-  funcionarios : Funcionario = {};
-  funcionariosData: any[] = [];
+
+  funcionariosData: Funcionario[] = [];
   unidadesData: any[] = [];
+  cargosData: any[] = [];
+  unidadCargosData: any[] = []; // Aquí guardamos los combos cargo+unidad
 
   submitted: boolean = false;
   rowsPerPageOptions: number[] = [5, 10, 20];
@@ -60,83 +60,85 @@ export class CargoAsignadoComponent implements OnInit {
     private cargoAsignadoService: CargoAsignadoService,
     private messageService: MessageService,
     private funcionarioService: FuncionarioService,
-    private unidadService: UnidadService, 
+    private unidadService: UnidadService,
+    private unidadCargoService: UnidadCargoService,
+    private cargoService: CargoService
   ) {}
 
   ngOnInit(): void {
-    this.getFuncionarios();
-    this.getCargosAsignados();
-    this.getUnidades(); 
-    
-  }
-  
+    forkJoin({
+      unidades: this.unidadService.getUnidades(),
+      cargos: this.cargoService.getCargos(),
+      unidadCargos: this.unidadCargoService.getUnidadesCargo(),
+      funcionarios: this.funcionarioService.getFuncionarios()
+    }).subscribe(({ unidades, cargos, unidadCargos, funcionarios }) => {
+      this.unidadesData = Array.isArray(unidades) ? unidades : (unidades.unidades || []);
+      this.cargosData = Array.isArray(cargos) ? cargos : (cargos.cargos || []);
+      const unidadCargosArray = Array.isArray(unidadCargos) ? unidadCargos : (unidadCargos.unidad_cargo || []);
+      this.funcionariosData = Array.isArray(funcionarios)
+        ? funcionarios
+        : ((funcionarios as { funcionarios?: Funcionario[] }).funcionarios || []);
 
-getCargosAsignados() {
-  this.cargoAsignadoService.getCargosAsignados().subscribe(data => {
-    // Accede a la propiedad cargo_asignado
-    const cargos = data.cargo_asignado || [];
-    this.cargosAsignadosData = cargos.map(c => ({
-      ...c,
-      fecha_inicio: c.fecha_inicio ? new Date(c.fecha_inicio) : undefined,
-      fecha_fin: c.fecha_fin ? new Date(c.fecha_fin) : undefined
-    }));
-  });
-}
-  
-getUnidades() {
-  this.unidadService.getUnidades().subscribe((data: any) => {
-    this.unidadesData = Array.isArray(data) ? data : (data.unidades || []);
-  });
-}
+      // Mapeamos unidadCargos para mostrar "Cargo - Unidad"
+      this.unidadCargosData = unidadCargosArray.map(uc => {
+        const unidad = this.unidadesData.find(u => u.id === uc.unidad_id);
+        const cargo = this.cargosData.find(c => c.id === uc.cargo_id);
+        return {
+          id: uc.id,
+          label: `${cargo ? cargo.nombre : 'Sin cargo'} - ${unidad ? unidad.nombre : 'Sin unidad'}`,
+          value: uc.id
+        };
+      });
 
-getFuncionarios() {
-  this.funcionarioService.getFuncionarios().subscribe((data: any) => {
-    this.funcionariosData = Array.isArray(data) ? data : (data.funcionarios || []);
-  });
-}
-
- 
-
-  onFuncionarioSelect(event: any) {
-    this.cargoAsignado.funcionario_id = event.value;
+      this.getCargosAsignados();
+    });
   }
 
-  onUnidadCargoSelect(event: any) {
-    this.cargoAsignado.unidad_cargo_id = event.value;
+  getCargosAsignados() {
+    this.cargoAsignadoService.getCargosAsignados().subscribe(data => {
+      const cargos = data.cargo_asignado || [];
+
+      this.cargosAsignadosData = cargos.map(c => {
+        const fecha_inicio = c.fecha_inicio ? new Date(c.fecha_inicio) : undefined;
+        const fecha_fin = c.fecha_fin ? new Date(c.fecha_fin) : undefined;
+
+        const unidadCargo = this.unidadCargosData.find(uc => uc.value === c.unidad_cargo_id);
+        const unidad_cargo_nombre = unidadCargo ? unidadCargo.label : '';
+
+        return {
+          ...c,
+          fecha_inicio,
+          fecha_fin,
+          unidad_cargo_nombre
+        };
+      });
+    });
   }
 
   saveOrUpdateCargoAsignado() {
     if (this.cargoAsignado.id) {
       this.cargoAsignadoService.updateCargoAsignado(this.cargoAsignado.id, this.cargoAsignado).subscribe({
-        next: (data) => {
+        next: () => {
           this.getCargosAsignados();
           this.cargoAsignadoDialog = false;
         },
-        error: (error) => {
-          console.error('Error al actualizar cargo asignado:', error);
-        }
+        error: error => console.error('Error al actualizar cargo asignado:', error)
       });
     } else {
       this.cargoAsignadoService.saveCargoAsignado(this.cargoAsignado).subscribe({
-        next: (data) => {
+        next: () => {
           this.getCargosAsignados();
           this.cargoAsignadoDialog = false;
         },
-        error: (error) => {
-          console.error('Error al guardar cargo asignado:', error);
-        }
+        error: error => console.error('Error al guardar cargo asignado:', error)
       });
     }
   }
 
   deleteCargoAsignado(id: number) {
     this.cargoAsignadoService.deleteCargoAsignado(id).subscribe({
-      next: () => {
-        this.getCargosAsignados();
-      },
-      error: (err) => {
-        console.error('Error al eliminar cargo asignado:', err);
-      }
+      next: () => this.getCargosAsignados(),
+      error: err => console.error('Error al eliminar cargo asignado:', err)
     });
   }
 
@@ -158,18 +160,13 @@ getFuncionarios() {
     } else {
       console.error('ID no disponible para el cargo asignado seleccionado');
     }
-
-}
-getFuncionarioNombre(funcionario_id: number): string {
-  const funcionario = this.funcionariosData.find(f => f.id == funcionario_id);
-  if (funcionario) {
-    // Usa los campos correctos según tu JSON
-    return `${funcionario.nombres ?? ''} ${funcionario.apellidos ?? ''}`.trim();
   }
-  return funcionario_id ? funcionario_id.toString() : '';
-}
-getUnidadNombre(unidad_cargo_id: number): string {
-  const unidad = this.unidadesData.find(u => u.id == unidad_cargo_id);
-  return unidad ? unidad.nombre : unidad_cargo_id?.toString() ?? '';
-}
+
+  getFuncionarioNombre(funcionario_id: number): string {
+    const funcionario = this.funcionariosData.find(f => f.id == funcionario_id);
+    if (funcionario) {
+      return `${funcionario.nombres ?? ''} ${funcionario.apellidos ?? ''}`.trim();
+    }
+    return funcionario_id ? funcionario_id.toString() : '';
+  }
 }

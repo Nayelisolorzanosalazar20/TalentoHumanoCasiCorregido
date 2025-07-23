@@ -1,5 +1,6 @@
 'use strict';
 
+
 export default {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('unidad', {
@@ -26,7 +27,7 @@ export default {
            },
            correo: {
              type: Sequelize.STRING,
-             allowNull: false,
+             allowNull: true,
            },
            estado: {
              type: Sequelize.STRING,
